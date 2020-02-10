@@ -31,8 +31,6 @@ class JAG extends Application {
     static JAG instance
     static Rectangle2D visualScreenBounds
     VBox rootBox
-//    static final String ASSETS='assets',MODELS='models',BLOCKMODEL='block',
-//    ITEMMODEL='item',BLOCKSTATES='blockstates',TEXTURES='textures',BLOCKTEXTURE='blocks',ITEMTEXTURE='items'
 
     final String RESOURCESPATH = 'Path to resources=', LASTSAVEDIRECTORY = 'Last save directory=', LAST_MOD_ID = 'Last mod id=',
                  ITEM_ID_FILE = 'Item id file name='

@@ -1,0 +1,31 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
+}
+group 'alexiy'
+version '0.7'
+
+apply plugin: 'groovy'
+
+sourceCompatibility = targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+shadowJar{
+    setClassifier('full')
+}
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+//    compile 'org.codehaus.groovy:groovy-all:2.4.+'
+    compile 'org.codehaus.groovy:groovy:2.4.+'
+    compile 'org.codehaus.groovy:groovy-json:2.4.+'
+    compile 'com.google.guava:guava:23.6-jre'
+}
+
+jar{
+
+    manifest {
+        attributes(['Main-Class': 'alexiy.minecraft.assetgenerator.JAG'])
+    }
+}

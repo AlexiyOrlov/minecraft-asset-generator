@@ -15,12 +15,18 @@ repositories {
 shadowJar{
     setClassifier('full')
 }
+repositories {
+    maven {
+        url  "https://dl.bintray.com/alexiy/maven-repo"
+    }
+}
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 //    compile 'org.codehaus.groovy:groovy-all:2.4.+'
     compile 'org.codehaus.groovy:groovy:2.4.+'
     compile 'org.codehaus.groovy:groovy-json:2.4.+'
     compile 'com.google.guava:guava:23.6-jre'
+    implementation 'org.knowbase:tools:0.4'
 }
 
 jar{

@@ -83,10 +83,10 @@ class Utilities {
         return null
     }
 
-    static void createAssetFoldersIfNeeded(final MinecraftVersion minecraftVersion, final File resourceFolder, final String modIdentifier) {
+    static void createAssetFoldersIfNeeded(final String minecraftVersion, final File resourceFolder, final String modIdentifier) {
         final File dataRoot = new File(resourceFolder, 'data')
         final File dataModID = new File(dataRoot, modIdentifier)
-        if (minecraftVersion == MinecraftVersion.V1_15) {
+        if (minecraftVersion == MinecraftVersion.V1_15.version) {
             dataModID.mkdirs()
         }
 
@@ -106,9 +106,9 @@ class Utilities {
         translation.mkdir()
 
         File lootTables = null
-        if (minecraftVersion == MinecraftVersion.V1_12) {
+        if (minecraftVersion == MinecraftVersion.V1_12.version) {
             lootTables = new File(assetmodId, LOOT_TABLES)
-        } else if (minecraftVersion == MinecraftVersion.V1_15) {
+        } else if (minecraftVersion == MinecraftVersion.V1_15.version) {
             lootTables = new File(dataModID, LOOT_TABLES)
         }
         lootTables.mkdir()
@@ -125,20 +125,14 @@ class Utilities {
         itemModels.mkdir()
 
         File recipes = null
-        if (minecraftVersion == MinecraftVersion.V1_12) {
+        if (minecraftVersion == MinecraftVersion.V1_12.version) {
             recipes = new File(assetmodId, RECIPES)
-        } else if (minecraftVersion == MinecraftVersion.V1_15) {
+        } else if (minecraftVersion == MinecraftVersion.V1_15.version) {
             recipes = new File(dataModID, RECIPES)
         }
         recipes.mkdir()
 
 
-        switch (minecraftVersion) {
-            case MinecraftVersion.V1_12:
 
-                break
-            case MinecraftVersion.V1_15:
-                break
-        }
     }
 }

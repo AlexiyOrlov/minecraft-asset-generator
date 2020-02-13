@@ -33,7 +33,7 @@ class MAG extends Application {
     Vbox2 rootBox
     MenuBar menuBar
     static String lastModId
-    static MinecraftVersion lastMinecraftVersion
+    static String lastMinecraftVersion
     static String lastResourceFolder
 
     @Override
@@ -41,7 +41,7 @@ class MAG extends Application {
         instance = this
         mainStage = primaryStage
         settings = new Settings(Paths.get('settings.txt'))
-        lastMinecraftVersion = MinecraftVersion.valueOf(settings.getOrDefault(LAST_MINECRAFT_VERSION, MinecraftVersion.V1_12.toString()))
+        lastMinecraftVersion = settings.getOrDefault(LAST_MINECRAFT_VERSION, MinecraftVersion.V1_12.version)
         lastModId = settings.getOrDefault(LAST_MOD_ID, "minecraft:")
         lastResourceFolder = settings.getOrDefault(LAST_RESOURCE_PATH, System.getProperty('user.home'))
         visualScreenBounds = Screen.getPrimary().getVisualBounds()
@@ -59,7 +59,7 @@ class MAG extends Application {
 
     @Override
     void stop() throws Exception {
-        settings.put(LAST_MINECRAFT_VERSION, lastMinecraftVersion.toString())
+        settings.put(LAST_MINECRAFT_VERSION, lastMinecraftVersion)
         settings.put(LAST_MOD_ID, lastModId)
         settings.put(LAST_RESOURCE_PATH, lastResourceFolder)
         settings.save()

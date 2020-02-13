@@ -42,7 +42,7 @@ class CreateItemModel implements EventHandler<ActionEvent> {
                 TextField textField = new TextField(id)
                 textField.setPromptText('Full item identifier')
 
-                ChoiceBox<MinecraftVersion> choiceBox = new ChoiceBox<>(FXCollections.observableArrayList(MinecraftVersion.values()))
+                ChoiceBox<String> choiceBox = new ChoiceBox<>(FXCollections.observableArrayList(MinecraftVersion.values()*.version))
                 choiceBox.selectionModel.select(MAG.lastMinecraftVersion)
                 choiceBox.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
@@ -76,7 +76,7 @@ class CreateItemModel implements EventHandler<ActionEvent> {
                         String[] path = string.split(':')
                         String modidentifier = path[0]
                         String itemid = path[1]
-                        MinecraftVersion minecraftVersion = choiceBox.selectionModel.getSelectedItem()
+                        String minecraftVersion = choiceBox.selectionModel.getSelectedItem()
                         Utilities.createAssetFoldersIfNeeded(minecraftVersion, outputPath, modidentifier)
                         ItemModel vart = variants.getSelectionModel().getSelectedItem()
                         Path modelFile = Paths.get(outputPath.canonicalPath, AssetConstants.ASSETS.value, modidentifier, AssetConstants.MODELS_LITERAL.value, Utilities.ITEM, itemid + '.json')
@@ -86,11 +86,11 @@ class CreateItemModel implements EventHandler<ActionEvent> {
                             Files.createFile(modelFile)
                             String content
                             String textureFolder = null
-                                if (minecraftVersion == MinecraftVersion.V1_12) {
-                                    textureFolder = Utilities.ITEMS
-                                } else if (minecraftVersion == MinecraftVersion.V1_15) {
-                                    textureFolder = Utilities.ITEM
-                                }
+                            if (minecraftVersion == MinecraftVersion.V1_12.version) {
+                                textureFolder = Utilities.ITEMS
+                            } else if (minecraftVersion == MinecraftVersion.V1_15.version) {
+                                textureFolder = Utilities.ITEM
+                            }
                             content = Utilities.formatJson([parent: vart.value, textures: [layer0: "$modidentifier:$textureFolder/$itemid"]])
                             Files.write(modelFile, Collections.singleton(content))
                             new Alert2(Alert.AlertType.INFORMATION, "Created ${modelFile.toString()}", ButtonType.OK).show()

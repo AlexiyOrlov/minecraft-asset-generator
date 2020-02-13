@@ -118,6 +118,9 @@ class CreateRecipe implements EventHandler<ActionEvent> {
                         MAG.lastMinecraftVersion = versionChoice.getSelectionModel().getSelectedItem()
                     }
                 })
+                TextField resultCount = new TextField('1')
+                resultCount.setPromptText('Result stack size')
+                resultCount.setMaxWidth(50)
                 Button create = new Button('Generate')
                 create.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
@@ -136,7 +139,8 @@ class CreateRecipe implements EventHandler<ActionEvent> {
                                         str = "minecraft:$str"
                                     if (version == MinecraftVersion.V1_12.version) {
                                         TextField meta = metadata.childrenUnmodifiable.get(keys.indexOf(field)) as TextField
-                                        ingredients.add([item: str, data: Integer.parseInt(meta.text)])
+                                        if (meta.text && meta.text.isInteger())
+                                            ingredients.add([item: str, data: Integer.parseInt(meta.text)])
                                     } else {
                                         ingredients.add([item: str])
                                     }
@@ -144,10 +148,19 @@ class CreateRecipe implements EventHandler<ActionEvent> {
                             }
                             if (!ingredients.isEmpty()) {
                                 fileContent.put('ingredients', ingredients)
+                                String amount = resultCount.getText()
+                                int amountt = 1
+                                if (amount.isInteger()) {
+                                    amountt = Integer.parseInt(amount)
+                                    if (amountt > 64)
+                                        amountt = 64
+                                    else if (amountt < 1)
+                                        amountt = 1
+                                }
                                 if (version == MinecraftVersion.V1_12.version)
-                                    fileContent.put('result', [item: resultItem.getText(), count: 1, data: 0])
+                                    fileContent.put('result', [item: resultItem.getText(), count: amountt, data: 0])
                                 else
-                                    fileContent.put('result', [item: resultItem.getText(), count: 1])
+                                    fileContent.put('result', [item: resultItem.getText(), count: amountt])
                             } else {
                                 new Alert2(Alert.AlertType.ERROR, 'No ingredients', ButtonType.OK).show()
                             }
@@ -155,7 +168,7 @@ class CreateRecipe implements EventHandler<ActionEvent> {
                         println(Utilities.formatJson(fileContent))
                     }
                 })
-                Vbox2 container = new Vbox2(resultItem, new Hbox2(selectResourceFolder, label), versionChoice, recipesChoiceBox, new Hbox2(gridPaneShaped, metadata), gridPaneShapeless, create)
+                Vbox2 container = new Vbox2(resultItem, new Hbox2(selectResourceFolder, label), versionChoice, recipesChoiceBox, new Hbox2(gridPaneShaped, metadata), gridPaneShapeless, resultCount, create)
                 Tab tab = new Tab("Recipe ($string)", container)
                 mag.tabPane.getTabs().add(tab)
 

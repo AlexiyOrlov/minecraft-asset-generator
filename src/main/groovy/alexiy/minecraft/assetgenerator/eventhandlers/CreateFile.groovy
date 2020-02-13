@@ -64,7 +64,7 @@ class CreateFile implements EventHandler<ActionEvent> {
             TextField modidentifier = new TextField(JAG.lastModid)
             modidentifier.setPromptText('Mod identifier')
             if (radioButton == itemmodel) {
-                ChoiceBox<String> parentmodels = new ChoiceBox<>(FXCollections.observableArrayList(ItemModels.values().value))
+                ChoiceBox<String> parentmodels = new ChoiceBox<>(FXCollections.observableArrayList(ItemModel.values().value))
                 parentmodels.selectionModel.select(1)
                 TextField objectidentifier
                 objectidentifier = new TextField()

@@ -1,6 +1,6 @@
 package alexiy.minecraft.assetgenerator
 
-
+import alexiy.minecraft.asset.generator.eventhandlers.MinecraftVersion
 import groovy.json.JsonOutput
 import javafx.scene.control.Label
 
@@ -10,6 +10,9 @@ import java.nio.file.Path
  * Created on 12/24/17.
  */
 class Utilities {
+
+    static final String BLOCK = 'block', ITEM = 'item', LOOT_TABLES = 'loot_tables', RECIPES = 'recipes', ITEMS = 'items'
+
     static String splitParameter(String result, HashMap<String, Object> json) {
         if (result.contains('/')) {
             def rj
@@ -78,5 +81,64 @@ class Utilities {
             return file
         }
         return null
+    }
+
+    static void createAssetFoldersIfNeeded(final MinecraftVersion minecraftVersion, final File resourceFolder, final String modIdentifier) {
+        final File dataRoot = new File(resourceFolder, 'data')
+        final File dataModID = new File(dataRoot, modIdentifier)
+        if (minecraftVersion == MinecraftVersion.V1_15) {
+            dataModID.mkdirs()
+        }
+
+        final File assetRoot = new File(resourceFolder, 'assets')
+        assetRoot.mkdir()
+
+        final File assetmodId = new File(assetRoot, modIdentifier)
+        assetmodId.mkdir()
+
+        File advancements = new File(assetmodId, 'advancements')
+        advancements.mkdir()
+
+        File blockstates = new File(assetmodId, 'blockstates')
+        blockstates.mkdir()
+
+        File translation = new File(assetmodId, 'lang')
+        translation.mkdir()
+
+        File lootTables = null
+        if (minecraftVersion == MinecraftVersion.V1_12) {
+            lootTables = new File(assetmodId, LOOT_TABLES)
+        } else if (minecraftVersion == MinecraftVersion.V1_15) {
+            lootTables = new File(dataModID, LOOT_TABLES)
+        }
+        lootTables.mkdir()
+        File entities = new File(lootTables, 'entities')
+        entities.mkdir()
+        File blocks = new File(lootTables, 'blocks')
+        blocks.mkdir()
+
+        File models = new File(assetmodId, 'models')
+        models.mkdir()
+        File blockModels = new File(models, BLOCK)
+        blockModels.mkdir()
+        File itemModels = new File(models, ITEM)
+        itemModels.mkdir()
+
+        File recipes = null
+        if (minecraftVersion == MinecraftVersion.V1_12) {
+            recipes = new File(assetmodId, RECIPES)
+        } else if (minecraftVersion == MinecraftVersion.V1_15) {
+            recipes = new File(dataModID, RECIPES)
+        }
+        recipes.mkdir()
+
+
+        switch (minecraftVersion) {
+            case MinecraftVersion.V1_12:
+
+                break
+            case MinecraftVersion.V1_15:
+                break
+        }
     }
 }

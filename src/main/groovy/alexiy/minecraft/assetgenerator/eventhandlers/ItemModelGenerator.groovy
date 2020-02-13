@@ -1,7 +1,7 @@
 package alexiy.minecraft.assetgenerator.eventhandlers
 
 import alexiy.minecraft.assetgenerator.AssetConstants
-import alexiy.minecraft.assetgenerator.ItemModels
+import alexiy.minecraft.assetgenerator.ItemModel
 import alexiy.minecraft.assetgenerator.JAG
 import alexiy.minecraft.assetgenerator.Utilities
 import javafx.event.ActionEvent
@@ -36,20 +36,20 @@ class ItemModelGenerator implements EventHandler<ActionEvent> {
             if (model.parent) model.parentFile.mkdirs()
             if (model.createNewFile()) {
                 String version = mcver.selectionModel.getSelectedItem();
-                if (parent == ItemModels.MIRROREDITEM.value) {
+                if (parent == ItemModel.HELD_ITEM.value) {
                     String text
                     if (version == '1.12')
-                        text = Utilities.formatJson([parent: ItemModels.MIRROREDITEM.value, textures: [layer0: "$modid:$AssetConstants.ITEMTEXTURE.value/$itemid"]])
+                        text = Utilities.formatJson([parent: ItemModel.HELD_ITEM.value, textures: [layer0: "$modid:$AssetConstants.ITEMTEXTURE.value/$itemid"]])
                     else if (version == '1.14')
-                        text = Utilities.formatJson([parent: ItemModels.MIRROREDITEM.value, textures: [layer0: "$modid:$AssetConstants.ITEMMODEL.value/$itemid"]])
+                        text = Utilities.formatJson([parent: ItemModel.HELD_ITEM.value, textures: [layer0: "$modid:$AssetConstants.ITEMMODEL.value/$itemid"]])
 
                     model.setText(text)
-                } else if (parent == ItemModels.BASICITEM.value) {
+                } else if (parent == ItemModel.SIMPLE_ITEM.value) {
                     String text3
                     if (version == '1.12')
-                        text3 = Utilities.formatJson([parent: ItemModels.BASICITEM.value, textures: [layer0: "$modid:$AssetConstants.ITEMTEXTURE.value/$itemid"]])
+                        text3 = Utilities.formatJson([parent: ItemModel.SIMPLE_ITEM.value, textures: [layer0: "$modid:$AssetConstants.ITEMTEXTURE.value/$itemid"]])
                     else if (version == '1.14')
-                        text3 = Utilities.formatJson([parent: ItemModels.BASICITEM.value, textures: [layer0: "$modid:$AssetConstants.ITEMMODEL.value/$itemid"]])
+                        text3 = Utilities.formatJson([parent: ItemModel.SIMPLE_ITEM.value, textures: [layer0: "$modid:$AssetConstants.ITEMMODEL.value/$itemid"]])
                     model.setText(text3)
                 }
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, '')

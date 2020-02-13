@@ -1,4 +1,4 @@
-package alexiy.minecraft.asset.generator.eventhandlers
+package alexiy.minecraft.asset.generator
 
 /**
  * Created on 2/13/20.

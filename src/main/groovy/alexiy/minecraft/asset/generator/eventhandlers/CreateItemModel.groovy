@@ -1,5 +1,6 @@
 package alexiy.minecraft.asset.generator.eventhandlers
 
+import alexiy.minecraft.asset.generator.MinecraftVersion
 import alexiy.minecraft.assetgenerator.AssetConstants
 import alexiy.minecraft.assetgenerator.ItemModel
 import alexiy.minecraft.assetgenerator.MAG
@@ -44,12 +45,13 @@ class CreateItemModel implements EventHandler<ActionEvent> {
 
                 ChoiceBox<String> choiceBox = new ChoiceBox<>(FXCollections.observableArrayList(MinecraftVersion.values()*.version))
                 choiceBox.selectionModel.select(MAG.lastMinecraftVersion)
-                choiceBox.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    void handle(ActionEvent e) {
-                        MAG.lastMinecraftVersion = choiceBox.getSelectionModel().getSelectedItem()
-                    }
-                })
+                choiceBox.setOnAction(new VersionSelector(choiceBox))
+//                choiceBox.setOnAction(new EventHandler<ActionEvent>() {
+//                    @Override
+//                    void handle(ActionEvent e) {
+//                        MAG.lastMinecraftVersion = choiceBox.getSelectionModel().getSelectedItem()
+//                    }
+//                })
                 ChoiceBox<ItemModel> variants = new ChoiceBox<>(FXCollections.observableArrayList(ItemModel.values()))
                 variants.selectionModel.select(ItemModel.SIMPLE_ITEM)
 
@@ -99,7 +101,7 @@ class CreateItemModel implements EventHandler<ActionEvent> {
                 })
                 Hbox2 resourceContainer = new Hbox2(selectResourceFolder, resourcePath)
                 Vbox2 content = new Vbox2(textField, choiceBox, variants, resourceContainer, generate)
-                Tab tab = new Tab(id, content)
+                Tab tab = new Tab("Item model ($id)", content)
                 mag.tabPane.getTabs().add(tab)
                 MAG.lastModId = id.substring(0, id.indexOf(':') + 1)
             } else {

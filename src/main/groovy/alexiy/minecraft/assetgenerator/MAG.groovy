@@ -1,7 +1,8 @@
 package alexiy.minecraft.assetgenerator
 
+import alexiy.minecraft.asset.generator.MinecraftVersion
 import alexiy.minecraft.asset.generator.eventhandlers.CreateItemModel
-import alexiy.minecraft.asset.generator.eventhandlers.MinecraftVersion
+import alexiy.minecraft.asset.generator.eventhandlers.CreateRecipe
 import javafx.application.Application
 import javafx.geometry.Rectangle2D
 import javafx.scene.Scene
@@ -47,7 +48,9 @@ class MAG extends Application {
         visualScreenBounds = Screen.getPrimary().getVisualBounds()
         MenuItem createItemModel = new MenuItem("Item model")
         createItemModel.setOnAction(new CreateItemModel(this))
-        Menu files = new Menu("Files", null, createItemModel)
+        MenuItem createRecipe = new MenuItem('Recipe')
+        createRecipe.setOnAction(new CreateRecipe(this))
+        Menu files = new Menu("Files", null, createItemModel, createRecipe)
         menuBar = new MenuBar(files)
         tabPane = new TabPane()
         rootBox = new Vbox2(menuBar, tabPane)

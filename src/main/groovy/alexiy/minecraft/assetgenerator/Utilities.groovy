@@ -1,6 +1,6 @@
 package alexiy.minecraft.assetgenerator
 
-import alexiy.minecraft.asset.generator.eventhandlers.MinecraftVersion
+import alexiy.minecraft.asset.generator.MinecraftVersion
 import groovy.json.JsonOutput
 import javafx.scene.control.Label
 

@@ -40,7 +40,6 @@ class CreateFile implements EventHandler<ActionEvent> {
         RadioButton recipe = new RadioButton('Recipe')
         RadioButton blockState = new RadioButton('Blockstate')
         RadioButton customBlockState = new RadioButton('Custom blockstate')
-        RadioButton achievement = new RadioButton('Advancement')
         VBox vBox = new VBox(6, itemmodel, recipe, blockState, customBlockState)
         dialog.getDialogPane().setContent(vBox)
         ToggleGroup group = new ToggleGroup()
@@ -252,8 +251,6 @@ class CreateFile implements EventHandler<ActionEvent> {
                 generate.setOnAction(new BlockStateGenerator(blocksstates, modidentifier, objectidentifier, directionname, optionalSingleTexture, blockstatetab, minecraftversion, contentpane))
                 tabPane.tabs.add(blockstatetab)
 
-            } else if (radioButton == achievement) {
-                ChoiceBox<String> types = new ChoiceBox<>()
             }
 
         }

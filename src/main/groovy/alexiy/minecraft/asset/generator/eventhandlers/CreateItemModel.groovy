@@ -85,16 +85,15 @@ class CreateItemModel implements EventHandler<ActionEvent> {
                         } else {
                             Files.createFile(modelFile)
                             String content
-                            if (vart == ItemModel.SIMPLE_ITEM) {
+                            String textureFolder = null
                                 if (minecraftVersion == MinecraftVersion.V1_12) {
-                                    content = Utilities.formatJson([parent: ItemModel.SIMPLE_ITEM.value, textures: [layer0: "$modidentifier:$Utilities.ITEMS/$itemid"]])
+                                    textureFolder = Utilities.ITEMS
                                 } else if (minecraftVersion == MinecraftVersion.V1_15) {
-                                    content = Utilities.formatJson([parent: ItemModel.SIMPLE_ITEM.value, textures: [layer0: "$modidentifier:$Utilities.ITEM/$itemid"]])
+                                    textureFolder = Utilities.ITEM
                                 }
-                            } else if (vart == ItemModel.HELD_ITEM) {
-
-                            }
+                            content = Utilities.formatJson([parent: vart.value, textures: [layer0: "$modidentifier:$textureFolder/$itemid"]])
                             Files.write(modelFile, Collections.singleton(content))
+                            new Alert2(Alert.AlertType.INFORMATION, "Created ${modelFile.toString()}", ButtonType.OK).show()
                         }
                     }
                 })
@@ -104,7 +103,7 @@ class CreateItemModel implements EventHandler<ActionEvent> {
                 mag.tabPane.getTabs().add(tab)
                 MAG.lastModId = id.substring(0, id.indexOf(':') + 1)
             } else {
-                new Alert2(Alert.AlertType.ERROR, 'Specify an identifier for item', ButtonType.OK).show()
+                new Alert2(Alert.AlertType.ERROR, 'Specify an identifier for the item', ButtonType.OK).show()
             }
         }
     }

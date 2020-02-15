@@ -46,12 +46,6 @@ class CreateItemModel implements EventHandler<ActionEvent> {
                 ChoiceBox<String> choiceBox = new ChoiceBox<>(FXCollections.observableArrayList(MinecraftVersion.values()*.version))
                 choiceBox.selectionModel.select(MAG.lastMinecraftVersion)
                 choiceBox.setOnAction(new VersionSelector(choiceBox))
-//                choiceBox.setOnAction(new EventHandler<ActionEvent>() {
-//                    @Override
-//                    void handle(ActionEvent e) {
-//                        MAG.lastMinecraftVersion = choiceBox.getSelectionModel().getSelectedItem()
-//                    }
-//                })
                 ChoiceBox<ItemModel> variants = new ChoiceBox<>(FXCollections.observableArrayList(ItemModel.values()))
                 variants.selectionModel.select(ItemModel.SIMPLE_ITEM)
 

@@ -50,6 +50,7 @@ class MAG extends Application {
         createItemModel.setOnAction(new CreateItemModel(this))
         MenuItem createRecipe = new MenuItem('Recipe')
         createRecipe.setOnAction(new CreateRecipe(this))
+        MenuItem createCustomBlockstate = new MenuItem('Custom blockstate')
         Menu files = new Menu("Files", null, createItemModel, createRecipe)
         menuBar = new MenuBar(files)
         tabPane = new TabPane()

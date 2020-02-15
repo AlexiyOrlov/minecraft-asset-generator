@@ -6,7 +6,7 @@ import javafx.event.EventHandler
 import javafx.scene.control.ChoiceBox
 
 /**
- * Created on 2/13/20.
+ * Updates {@link MAG#lastMinecraftVersion}
  */
 class VersionSelector implements EventHandler<ActionEvent> {
 

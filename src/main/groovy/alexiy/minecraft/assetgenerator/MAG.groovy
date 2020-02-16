@@ -4,14 +4,15 @@ import alexiy.minecraft.asset.generator.MinecraftVersion
 import alexiy.minecraft.asset.generator.eventhandlers.CreateItemModel
 import alexiy.minecraft.asset.generator.eventhandlers.CreateRecipe
 import javafx.application.Application
+import javafx.event.ActionEvent
+import javafx.event.EventHandler
 import javafx.geometry.Rectangle2D
 import javafx.scene.Scene
-import javafx.scene.control.Menu
-import javafx.scene.control.MenuBar
-import javafx.scene.control.MenuItem
-import javafx.scene.control.TabPane
+import javafx.scene.control.*
+import javafx.stage.Modality
 import javafx.stage.Screen
 import javafx.stage.Stage
+import org.knowbase.Dialog2
 import org.knowbase.Vbox2
 import org.knowbase.tools.Settings
 
@@ -51,7 +52,39 @@ class MAG extends Application {
         MenuItem createRecipe = new MenuItem('Recipe')
         createRecipe.setOnAction(new CreateRecipe(this))
         MenuItem createCustomBlockstate = new MenuItem('Custom blockstate')
-        Menu files = new Menu("Files", null, createItemModel, createRecipe)
+        MenuItem createAssetFolders = new MenuItem('Make asset folders')
+        createAssetFolders.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            void handle(ActionEvent event) {
+                Dialog2<Boolean, Vbox2> dialog2 = new Dialog2('Confirm options', new Vbox2(), Modality.WINDOW_MODAL, ButtonType.APPLY, ButtonType.CANCEL)
+                Vbox2 vbox2 = dialog2.getContainer() as Vbox2
+                TextField version, resourceFolder, modid
+                vbox2.children.add(version = new TextField(lastMinecraftVersion))
+                vbox2.children.add(resourceFolder = new TextField(lastResourceFolder))
+                vbox2.children.add(modid = new TextField(lastModId.contains(':') ? lastModId.substring(0, lastModId.indexOf(':')) : lastModId))
+                dialog2.setResultConverter(o -> {
+                    if (o == ButtonType.APPLY) {
+                        return true
+                    }
+                    return false
+                })
+                def result = dialog2.showAndWait()
+                if (result.isPresent()) {
+                    if (result.get() == true) {
+                        if (version.text && resourceFolder.text && modid.text) {
+                            String domain = modid.text
+                            if (domain.contains(':'))
+                                domain = domain.substring(0, domain.indexOf(':'))
+                            Utilities.createAssetFoldersIfNeeded(version.text, new File(resourceFolder.text), domain)
+                            lastModId = domain
+                        } else {
+                            new org.knowbase.Alert2(Alert.AlertType.ERROR, 'Fill all fields', ButtonType.OK).show()
+                        }
+                    }
+                }
+            }
+        })
+        Menu files = new Menu("Files", null, createAssetFolders, createItemModel, createRecipe)
         menuBar = new MenuBar(files)
         tabPane = new TabPane()
         rootBox = new Vbox2(menuBar, tabPane)

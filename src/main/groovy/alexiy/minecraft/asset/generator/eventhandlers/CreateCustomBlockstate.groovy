@@ -30,6 +30,7 @@ class CreateCustomBlockstate implements EventHandler<ActionEvent> {
             if (id) {
                 TextField textField = new TextField(id)
                 textField.setTooltip(new Tooltip('Full block identifier'))
+
             }
         }
     }

@@ -73,7 +73,6 @@ class CreateItemModel implements EventHandler<ActionEvent> {
                         String modidentifier = path[0]
                         String itemid = path[1]
                         String minecraftVersion = choiceBox.selectionModel.getSelectedItem()
-                        Utilities.createAssetFoldersIfNeeded(minecraftVersion, outputPath, modidentifier)
                         ItemModel vart = variants.getSelectionModel().getSelectedItem()
                         Path modelFile = Paths.get(outputPath.canonicalPath, AssetConstants.ASSETS.value, modidentifier, AssetConstants.MODELS_LITERAL.value, Utilities.ITEM, itemid + '.json')
                         if (Files.exists(modelFile)) {

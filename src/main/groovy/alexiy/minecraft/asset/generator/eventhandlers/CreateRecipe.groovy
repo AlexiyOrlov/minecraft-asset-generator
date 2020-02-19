@@ -79,8 +79,11 @@ class CreateRecipe implements EventHandler<ActionEvent> {
         if (result.isPresent()) {
             String string = result.get()
             if (string) {
-                if (!string.contains(':'))
+                if (!string.contains(':')) {
                     string = "minecraft:$string"
+                    MAG.lastModId = 'minecraft'
+                } else
+                    MAG.lastModId = string.substring(0, string.indexOf(':') + 1)
                 TextField resultItem = new TextField(string)
                 resultItem.setPromptText('Full recipe identifier')
                 Button selectResourceFolder = new Button('Set output folder:')
@@ -121,7 +124,7 @@ class CreateRecipe implements EventHandler<ActionEvent> {
                         }
                     }
                 })
-                ChoiceBox<String> versionChoice = new ChoiceBox<>(FXCollections.observableArrayList(MinecraftVersion.values()*.version))
+                ChoiceBox<String> versionChoice = new ChoiceBox<>(FXCollections.observableArrayList(MinecraftVersion.values()*.version)) as ChoiceBox<String>
                 versionChoice.selectionModel.select(MAG.lastMinecraftVersion)
                 versionChoice.setOnAction(new EventHandler<ActionEvent>() {
                     @Override

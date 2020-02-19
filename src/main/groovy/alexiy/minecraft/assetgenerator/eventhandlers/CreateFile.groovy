@@ -69,7 +69,7 @@ class CreateFile implements EventHandler<ActionEvent> {
                 objectidentifier = new TextField()
                 objectidentifier.setPromptText('Item identifier')
                 Button generate = new Button('Generate model file')
-                VBox content = new VBox(6, minecraftversion, parentmodels, modidentifier, objectidentifier, setOutputFolder, generate)
+                VBox content = new VBox(6, minecraftversion, parentmodels, modidentifier, objectidentifier, generate)
                 Tab itemtab = new Tab('Item model', content)
                 generate.setOnAction(new ItemModelGenerator(parentmodels, modidentifier, objectidentifier, minecraftversion, itemtab))
                 tabPane.tabs.add(itemtab)
@@ -130,7 +130,8 @@ class CreateFile implements EventHandler<ActionEvent> {
                                                             }
                                                         } else return null
                                                     } else return null
-                                                    if (pairs) combinations.add(pairs)
+                                                    if (pairs)
+                                                        combinations.add(pairs)
 //                                                    println(pairs)
                                                 }
 //                                                println(combinations)
@@ -246,7 +247,7 @@ class CreateFile implements EventHandler<ActionEvent> {
                 })
                 minecraftversion.selectionModel.select(1);
                 HBox options = new HBox(6, minecraftversion, blocksstates, description, directionname)
-                VBox contentpane = new VBox(6, options, modidentifier, objectidentifier, optionalSingleTexture, setOutputFolder, generate)
+                VBox contentpane = new VBox(6, options, modidentifier, objectidentifier, optionalSingleTexture, generate)
                 Tab blockstatetab = new Tab('Block state', contentpane)
                 generate.setOnAction(new BlockStateGenerator(blocksstates, modidentifier, objectidentifier, directionname, optionalSingleTexture, blockstatetab, minecraftversion, contentpane))
                 tabPane.tabs.add(blockstatetab)

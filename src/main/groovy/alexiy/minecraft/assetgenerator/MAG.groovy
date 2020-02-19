@@ -1,6 +1,7 @@
 package alexiy.minecraft.assetgenerator
 
 import alexiy.minecraft.asset.generator.MinecraftVersion
+import alexiy.minecraft.asset.generator.eventhandlers.CreateCustomBlockstate
 import alexiy.minecraft.asset.generator.eventhandlers.CreateItemModel
 import alexiy.minecraft.asset.generator.eventhandlers.CreateRecipe
 import javafx.application.Application
@@ -52,6 +53,7 @@ class MAG extends Application {
         MenuItem createRecipe = new MenuItem('Recipe')
         createRecipe.setOnAction(new CreateRecipe(this))
         MenuItem createCustomBlockstate = new MenuItem('Custom blockstate')
+        createCustomBlockstate.setOnAction(new CreateCustomBlockstate(this))
         MenuItem createAssetFolders = new MenuItem('Make asset folders')
         createAssetFolders.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -84,7 +86,7 @@ class MAG extends Application {
                 }
             }
         })
-        Menu files = new Menu("Files", null, createAssetFolders, createItemModel, createRecipe)
+        Menu files = new Menu("Files", null, createAssetFolders, createItemModel, createRecipe, createCustomBlockstate)
         menuBar = new MenuBar(files)
         tabPane = new TabPane()
         rootBox = new Vbox2(menuBar, tabPane)

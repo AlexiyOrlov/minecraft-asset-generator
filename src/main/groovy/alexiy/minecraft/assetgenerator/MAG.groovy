@@ -54,6 +54,7 @@ class MAG extends Application {
         createRecipe.setOnAction(new CreateRecipe(this))
         MenuItem createCustomBlockstate = new MenuItem('Custom blockstate')
         createCustomBlockstate.setOnAction(new CreateCustomBlockstate(this))
+
         MenuItem createAssetFolders = new MenuItem('Make asset folders')
         createAssetFolders.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -86,6 +87,7 @@ class MAG extends Application {
                 }
             }
         })
+
         Menu files = new Menu("Files", null, createAssetFolders, createItemModel, createRecipe, createCustomBlockstate)
         menuBar = new MenuBar(files)
         tabPane = new TabPane()

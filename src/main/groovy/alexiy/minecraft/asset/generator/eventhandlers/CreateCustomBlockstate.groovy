@@ -1,12 +1,18 @@
 package alexiy.minecraft.asset.generator.eventhandlers
 
 import alexiy.minecraft.assetgenerator.MAG
+import alexiy.minecraft.assetgenerator.Utilities
 import com.google.common.collect.Sets
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
+import javafx.stage.DirectoryChooser
+import org.knowbase.Hbox2
 import org.knowbase.Vbox2
+
+import java.nio.file.Path
+import java.nio.file.Paths
 
 /**
  * Created on 2/15/20.
@@ -28,21 +34,35 @@ class CreateCustomBlockstate implements EventHandler<ActionEvent> {
         if (result.isPresent()) {
             String id = result.get()
             if (id) {
-                TextField textField = new TextField(id)
-                textField.setTooltip(new Tooltip('Full block identifier'))
-                TextField tf = new TextField()
-                tf.setPromptText('Properties')
-                tf.setTooltip(new Tooltip('Write comma-separated blockstate properties in corresponding order'))
+                TextField fullId = new TextField(id)
+                fullId.setTooltip(new Tooltip('Full block identifier'))
+                TextField listOfProperties = new TextField()
+                listOfProperties.setPromptText('Properties')
+                listOfProperties.setTooltip(new Tooltip('Write comma-separated blockstate properties in corresponding order'))
                 GridPane grid = new GridPane()
                 grid.setVgap(6)
                 grid.setHgap(6)
+                Button setOutput = new Button('Set destination')
+                setOutput.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    void handle(ActionEvent evt) {
+                        DirectoryChooser directoryChooser = new DirectoryChooser()
+                        directoryChooser.setInitialDirectory(new File(MAG.lastResourceFolder))
+                        def selection = directoryChooser.showDialog(MAG.mainStage)
+                        if (selection) {
+                            outputPath = selection
+                            resourcePath.setText(selection.canonicalPath)
+                            MAG.lastResourceFolder = selection.canonicalPath
+                        }
+                    }
+                })
                 Button next = new Button('Next')
-                Vbox2 content = new Vbox2(textField, tf, next, grid)
+                Vbox2 content = new Vbox2(fullId, listOfProperties, new Hbox2(setOutput, resourcePath), next, grid)
                 next.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     void handle(ActionEvent evt) {
-                        if (textField.text && tf.text) {
-                            def properties = tf.text.split(',')
+                        if (fullId.text && listOfProperties.text) {
+                            def properties = listOfProperties.text.split(',')
                             if (properties) {
                                 properties.eachWithIndex { it, index ->
                                     TextField values = new TextField()
@@ -66,18 +86,25 @@ class CreateCustomBlockstate implements EventHandler<ActionEvent> {
                                                 set.each { s ->
                                                     set2.add("$property=$s")
                                                 }
-                                                println(set2)
                                                 sets.add(set2)
                                             }
                                         }
                                         Set<List<String>> product = Sets.cartesianProduct(sets) as Set<List<String>>
                                         def map = [:]
                                         product.each { it ->
-                                            String variant
+                                            String variant = ''
                                             it.each { s ->
+                                                variant += "$s,"
                                             }
+                                            map.put(variant.substring(0, variant.length() - 1), ['model': fullId.text])
                                         }
-                                        println(product)
+                                        map = ['variants': map]
+                                        String output = Utilities.formatJson(map)
+                                        //array is easier than sub-strings
+                                        String[] fullid = fullId.text.split(':')
+                                        Path path = Paths.get(resourcePath.text, 'assets', fullid[0], 'blockstates', fullid[1] + '.json')
+                                        Utilities.createJsonFile(path, output)
+                                        MAG.lastResourceFolder = resourcePath.text
                                     }
                                 })
                                 content.children.add(generate)

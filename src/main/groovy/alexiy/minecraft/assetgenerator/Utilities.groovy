@@ -75,7 +75,8 @@ class Utilities {
     /**Creates a Json file (dirs included) and sets its content*/
     static File createJsonFile(Path name, String content) {
         File file = name.toFile()
-        if (file.parentFile) file.parentFile.mkdirs()
+        if (file.parentFile)
+            file.parentFile.mkdirs()
         if (file.createNewFile()) {
             file.setText(content)
             return file

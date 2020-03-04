@@ -19,7 +19,6 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
 
     ChoiceBox<String> generateLootTable, blocksstates
     TextField modidentifier, objectidentifier, directionname, singleTexture
-//    File resourceDirectory
     Tab blockstatetab
     CheckBox generateBlockstate, generateWorldModel
     ChoiceBox<String> minecraftVersion

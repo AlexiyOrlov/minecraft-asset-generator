@@ -222,7 +222,7 @@ class CreateFile implements EventHandler<ActionEvent> {
                 })
             } else if (radioButton == blockState)      //TODO
             {
-                ChoiceBox<String> blocksstates = new ChoiceBox(FXCollections.observableArrayList(BlockStates.values().type))
+                ChoiceBox<String> blocksstates = new ChoiceBox(FXCollections.observableArrayList(BlockStates.values()*.type))
                 blocksstates.setTooltip(new Tooltip('List of preset blockstates'))
                 Button generate = new Button('Generate')
                 TextField objectidentifier

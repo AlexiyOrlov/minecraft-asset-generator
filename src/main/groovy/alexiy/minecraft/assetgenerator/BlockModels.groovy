@@ -12,8 +12,8 @@ enum BlockModels {
     CROSS('block/cross', 'For flower-like blocks'),
 
 
-//    public SimpleStringProperty desc
-    public String value, description
+    public String value
+    public String description
 
     BlockModels(String value_, String description_) {
         value = value_

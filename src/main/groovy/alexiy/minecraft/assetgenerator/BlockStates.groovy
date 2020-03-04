@@ -17,11 +17,15 @@ enum BlockStates {
 //    SLAB('Slab','Standard slab'),
 //    CABLE('Cable','')
 
-    String type, description
+    /** Type alias */
+    String type
+    String description
+//    String parentModel
 
     BlockStates(String type_, String description_) {
         type = type_
         description = description_
+//        parentModel=parentModel_
     }
 
 

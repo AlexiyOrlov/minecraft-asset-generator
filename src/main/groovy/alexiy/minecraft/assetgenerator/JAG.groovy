@@ -179,7 +179,7 @@ class JAG extends Application {
 
         Menu utilities = new Menu("Utilities", null, itemidentifiers)
         MenuBar menuBar = new MenuBar(files, help, prefrences, utilities)
-        rootBox = new VBox(6, menuBar, tabPane)
+        rootBox = new VBox(6, menuBar, tabPane, setOutputFolder)
         Scene scene = new Scene(rootBox, visualScreenBounds.width / 2.toDouble(), visualScreenBounds.height - 200)
         primaryStage.setScene(scene)
         primaryStage.show()

@@ -5,7 +5,6 @@ import alexiy.minecraft.assetgenerator.AssetConstants
 import alexiy.minecraft.assetgenerator.MAG
 import alexiy.minecraft.assetgenerator.Recipes
 import alexiy.minecraft.assetgenerator.Utilities
-import com.google.common.collect.TreeBasedTable
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.event.ActionEvent
@@ -39,7 +38,6 @@ class CreateRecipe implements EventHandler<ActionEvent> {
     void handle(ActionEvent event) {
         Path outputPath = Paths.get(MAG.lastResourceFolder)
         Label label = new Label(MAG.lastResourceFolder)
-        TreeBasedTable<Integer, Integer, String> shapedInputs = TreeBasedTable.create()
         GridPane metadata = new GridPane()
         for (row in 0..2) {
             for (column in 0..2) {

@@ -92,14 +92,14 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                         blockstatefile.setText(Utilities.createSimpleBlockState(modid, blockidentifier, version))
                     }
                     if (generateModels) {
-                        String string = Utilities.formatJson([parent: BlockModels.BLOCKSINGLETEXTURE.value, textures: [all: textureprefix]])
+                        String string = Utilities.formatJson([parent: BlockModel.SINGLETEXTURE.value, textures: [all: textureprefix]])
                         modelWorld.setText(string)
 
                     }
                     break
                 case BlockState.CROSS.type:
                     if (generateModels) {
-                        String json = Utilities.formatJson([parent: BlockModels.CROSS.value, textures: [cross: textureprefix]])
+                        String json = Utilities.formatJson([parent: BlockModel.CROSS.value, textures: [cross: textureprefix]])
                         modelWorld.setText(json)
                     }
                     if (generateState)
@@ -107,7 +107,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                     break
                 case BlockState.DIFFERENT_SIDES.type:
                     if (generateModels) {
-                        String string = Utilities.formatJson([parent: BlockModels.BLOCKDIFFERENTSIDES.value, textures: [particle: textureprefix + '_up', east: textureprefix + '_east', west: textureprefix + '_west', north: textureprefix + '_north', south: textureprefix + '_south', up: textureprefix + '_up', down: textureprefix + '_down']])
+                        String string = Utilities.formatJson([parent: BlockModel.DIFFERENTSIDES.value, textures: [particle: textureprefix + '_up', east: textureprefix + '_east', west: textureprefix + '_west', north: textureprefix + '_north', south: textureprefix + '_south', up: textureprefix + '_up', down: textureprefix + '_down']])
                         modelWorld.setText(string)
                     }
                     if (generateState)
@@ -115,7 +115,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                     break
                 case BlockState.COLUMN.type:
                     if (generateModels) {
-                        String string = Utilities.formatJson([parent: BlockModels.BLOCKCOLUMN.value, textures: [side: textureprefix, end: textureprefix + '_end']])
+                        String string = Utilities.formatJson([parent: BlockModel.COLUMN.value, textures: [side: textureprefix, end: textureprefix + '_end']])
                         modelWorld.setText(string)
                     }
                     if (generateState)
@@ -123,7 +123,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                     break
                 case BlockState.TOP_BOTTOM_SIDE.type:
                     if (generateModels) {
-                        String str = Utilities.formatJson([parent: BlockModels.BLOCKDIFFERENTTOPANDBOTTOM.value, textures: [top: textureprefix + '_top', bottom: textureprefix + '_bottom', side: textureprefix]])
+                        String str = Utilities.formatJson([parent: BlockModel.DIFFERENT_TOPANDBOTTOM.value, textures: [top: textureprefix + '_top', bottom: textureprefix + '_bottom', side: textureprefix]])
                         modelWorld.setText(str)
                     }
                     if (generateState)
@@ -149,9 +149,9 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                     if (generateModels) {
                         String worldmodel = '{}'
                         if (version == '1.12') {
-                            worldmodel = Utilities.formatJson([parent: BlockModels.BLOCKDIRECTIONAL.value, textures: [bottom: "$modid:$AssetConstants.BLOCKTEXTURE.value/$blockidentifier" + '_bottom', side: "$modid:$AssetConstants.BLOCKTEXTURE.value/$blockidentifier" + '_side', platform: "$modid:$AssetConstants.BLOCKTEXTURE.value/$blockidentifier"]])
+                            worldmodel = Utilities.formatJson([parent: BlockModel.DIRECTIONAL.value, textures: [bottom: "$modid:$AssetConstants.BLOCKTEXTURE.value/$blockidentifier" + '_bottom', side: "$modid:$AssetConstants.BLOCKTEXTURE.value/$blockidentifier" + '_side', platform: "$modid:$AssetConstants.BLOCKTEXTURE.value/$blockidentifier"]])
                         } else if (version == '1.14') {
-                            worldmodel = Utilities.formatJson([parent: BlockModels.BLOCKDIRECTIONAL.value, textures: [bottom: "$modid:$AssetConstants.BLOCK_LITERAL.value/$blockidentifier" + '_bottom', side: "$modid:$AssetConstants.BLOCK_LITERAL.value/$blockidentifier" + '_side', platform: "$modid:$AssetConstants.BLOCK_LITERAL.value/$blockidentifier"]])
+                            worldmodel = Utilities.formatJson([parent: BlockModel.DIRECTIONAL.value, textures: [bottom: "$modid:$AssetConstants.BLOCK_LITERAL.value/$blockidentifier" + '_bottom', side: "$modid:$AssetConstants.BLOCK_LITERAL.value/$blockidentifier" + '_side', platform: "$modid:$AssetConstants.BLOCK_LITERAL.value/$blockidentifier"]])
                         }
                         modelWorld.setText(worldmodel)
 

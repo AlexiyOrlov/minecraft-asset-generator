@@ -5,7 +5,9 @@ package alexiy.minecraft.assetgenerator
 enum AssetConstants {
     ASSETS('assets'),
     MODELS_LITERAL('models'),
+    @Deprecated
     BLOCKMODEL('block'),
+    @Deprecated
     ITEMMODEL('item'),
     BLOCKSTATES('blockstates'),
     TEXTURES('textures'),

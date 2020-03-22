@@ -12,4 +12,9 @@ enum MinecraftVersion {
     MinecraftVersion(String version) {
         this.version = version
     }
+
+    @Override
+    String toString() {
+        return version
+    }
 }

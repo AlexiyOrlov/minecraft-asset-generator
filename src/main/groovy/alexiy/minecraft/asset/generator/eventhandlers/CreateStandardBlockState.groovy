@@ -1,6 +1,7 @@
 package alexiy.minecraft.asset.generator.eventhandlers
 
 import alexiy.minecraft.asset.generator.MinecraftVersion
+import alexiy.minecraft.assetgenerator.AssetConstants
 import alexiy.minecraft.assetgenerator.BlockModels
 import alexiy.minecraft.assetgenerator.BlockState
 import alexiy.minecraft.assetgenerator.MAG
@@ -44,14 +45,15 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
         Button generate = new Button("Generate")
         ChoiceBox<String> version = new ChoiceBox<>(FXCollections.observableArrayList(MinecraftVersion.values()*.version)) as ChoiceBox<String>
         version.selectionModel.select(MAG.lastMinecraftVersion)
-        ChoiceBox<String> choices = new ChoiceBox<>(FXCollections.observableArrayList(BlockState.values()*.type)) as ChoiceBox<String>
-        choices.selectionModel.select(BlockState.SIMPLE_BLOCK.type)
+        ChoiceBox<BlockState> choices = new ChoiceBox<>(FXCollections.observableArrayList(BlockState.values()))
+        choices.selectionModel.select(BlockState.SIMPLE_BLOCK)
         Label description = new Label(BlockState.SIMPLE_BLOCK.description)
         Label parentModel = new Label(BlockModels.BLOCKSINGLETEXTURE.value)
         choices.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             void handle(ActionEvent even) {
-                BlockState blockState = BlockState.values().find({ it -> it.type == choices.selectionModel.getSelectedItem() })
+                BlockState blockState = choices.getSelectionModel().getSelectedItem()
+                //BlockState.values().find({ it -> it.type == choices.selectionModel.getSelectedItem() })
                 description.setText(blockState.description)
                 switch (blockState) {
                     case BlockState.COLUMN:
@@ -81,13 +83,26 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
             void handle(ActionEvent evnt) {
                 String fullidentifier = "$modidr.text:$blockidr.text"
                 if (fullidentifier) {
-                    String parent = choices.selectionModel.getSelectedItem()
+                    BlockState parent = choices.selectionModel.getSelectedItem()
                     String v = version.selectionModel.getSelectedItem()
+                    String texturePath = ''
+                    switch (v) {
+                        case MinecraftVersion.V1_12.version:
+                            texturePath = "$modidr.text:$AssetConstants.BLOCKTEXTURE.value/$blockidr.text"
+                            break
+                        case MinecraftVersion.V1_15.version:
+                            texturePath = "$modidr.text:$AssetConstants.BLOCK_LITERAL.value/$blockidr.text"
+                            break
+                    }
+                    switch (parent) {
+                        case BlockState.SIMPLE_BLOCK:
+                            break
+                    }
                     println(path.text)
                     println(parentModel.text)
                     println(v)
                     MAG.lastMinecraftVersion = v
-                    println(parent)
+                    println(parent.name())
                 }
             }
         })

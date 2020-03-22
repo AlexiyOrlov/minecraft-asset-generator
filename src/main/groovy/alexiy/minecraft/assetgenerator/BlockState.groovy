@@ -28,5 +28,8 @@ enum BlockState {
 //        parentModel=parentModel_
     }
 
-
+    @Override
+    String toString() {
+        return type
+    }
 }

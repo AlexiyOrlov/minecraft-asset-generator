@@ -67,7 +67,8 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                 blockstatefile.createNewFile()
             }
             File inventoryblockmodel = Paths.get(resourceDirectory.absolutePath, AssetConstants.ASSETS.value, modid, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCKMODEL.value, blockidentifier + '_inventory.json').toFile()
-            if (inventoryblockmodel.parentFile) inventoryblockmodel.parentFile.mkdirs()
+            if (inventoryblockmodel.parentFile)
+                inventoryblockmodel.parentFile.mkdirs()
             File itemModel = null
             if (version == '1.12')
                 itemModel = Paths.get(resourceDirectory.absolutePath, AssetConstants.ASSETS.value, modid, AssetConstants.MODELS_LITERAL.value, AssetConstants.ITEMMODEL.value, blockidentifier + '.json').toFile()
@@ -146,18 +147,17 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                         blockstatefile.setText(vars)
                     }
                     if (generateModels) {
-                        String worldmodel
+                        String worldmodel = '{}'
                         if (version == '1.12') {
                             worldmodel = Utilities.formatJson([parent: BlockModels.BLOCKDIRECTIONAL.value, textures: [bottom: "$modid:$AssetConstants.BLOCKTEXTURE.value/$blockidentifier" + '_bottom', side: "$modid:$AssetConstants.BLOCKTEXTURE.value/$blockidentifier" + '_side', platform: "$modid:$AssetConstants.BLOCKTEXTURE.value/$blockidentifier"]])
                         } else if (version == '1.14') {
                             worldmodel = Utilities.formatJson([parent: BlockModels.BLOCKDIRECTIONAL.value, textures: [bottom: "$modid:$AssetConstants.BLOCK_LITERAL.value/$blockidentifier" + '_bottom', side: "$modid:$AssetConstants.BLOCK_LITERAL.value/$blockidentifier" + '_side', platform: "$modid:$AssetConstants.BLOCK_LITERAL.value/$blockidentifier"]])
                         }
                         modelWorld.setText(worldmodel)
-                    }
-                    //TODO 1.14.4
-                    if (generateModels) {
+
                         String inventorymodel = Utilities.createDirectionalBlockModel(modid, blockidentifier, version)
-                        if (blockstate != BlockState.DOOR.type) inventoryblockmodel.createNewFile()
+                        if (blockstate != BlockState.DOOR.type)
+                            inventoryblockmodel.createNewFile()
                         inventoryblockmodel.setText(inventorymodel)
                     }
                     break

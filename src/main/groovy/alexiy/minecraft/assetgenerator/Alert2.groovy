@@ -7,6 +7,7 @@ import javafx.scene.layout.Region
 /**
  * Created on 8/7/17.
  */
+@Deprecated
 class Alert2 extends Alert {
     {
         setResizable(true)

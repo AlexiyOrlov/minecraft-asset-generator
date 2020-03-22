@@ -38,6 +38,7 @@ class Utilities {
         }
     }
 
+    /** With pretty print*/
     static String formatJson(Object ob) {
         JsonOutput.prettyPrint(JsonOutput.toJson(ob))
     }
@@ -62,6 +63,7 @@ class Utilities {
             return formatJson([variants: [normal: [model: "$modid:$blockidentifier"]]])
         else if (mversion == "1.14")
             return formatJson([variants: [(""): [model: "$modid:$AssetConstants.BLOCKMODEL.value/$blockidentifier"]]])
+        return ''
     }
 
     static String createSimpleBlockItemModel(String modid, String identifier) {

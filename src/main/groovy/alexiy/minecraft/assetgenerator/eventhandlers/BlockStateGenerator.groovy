@@ -81,12 +81,12 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
             else if (version == '1.14')
                 textureprefix = "$modid:$AssetConstants.BLOCK_LITERAL.value/$blockidentifier"
 
-            if (generateModels && blockstate != BlockStates.DOOR.type && blockstate != BlockStates.PANE.type)
+            if (generateModels && blockstate != BlockState.DOOR.type && blockstate != BlockState.PANE.type)
                 modelWorld.createNewFile()
-            if (blockstate != BlockStates.DOOR.type && generateModels)
+            if (blockstate != BlockState.DOOR.type && generateModels)
                 itemModel.createNewFile()
             switch (blockstate) {
-                case BlockStates.SIMPLE_BLOCK.type:
+                case BlockState.SIMPLE_BLOCK.type:
                     if (generateState) {
                         blockstatefile.setText(Utilities.createSimpleBlockState(modid, blockidentifier, version))
                     }
@@ -96,7 +96,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
 
                     }
                     break
-                case BlockStates.CROSS.type:
+                case BlockState.CROSS.type:
                     if (generateModels) {
                         String json = Utilities.formatJson([parent: BlockModels.CROSS.value, textures: [cross: textureprefix]])
                         modelWorld.setText(json)
@@ -104,7 +104,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                     if (generateState)
                         blockstatefile.setText(Utilities.createSimpleBlockState(modid, blockidentifier, version))
                     break
-                case BlockStates.DIFFERENT_SIDES.type:
+                case BlockState.DIFFERENT_SIDES.type:
                     if (generateModels) {
                         String string = Utilities.formatJson([parent: BlockModels.BLOCKDIFFERENTSIDES.value, textures: [particle: textureprefix + '_up', east: textureprefix + '_east', west: textureprefix + '_west', north: textureprefix + '_north', south: textureprefix + '_south', up: textureprefix + '_up', down: textureprefix + '_down']])
                         modelWorld.setText(string)
@@ -112,7 +112,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                     if (generateState)
                         blockstatefile.setText(Utilities.createSimpleBlockState(modid, blockidentifier, version))
                     break
-                case BlockStates.COLUMN.type:
+                case BlockState.COLUMN.type:
                     if (generateModels) {
                         String string = Utilities.formatJson([parent: BlockModels.BLOCKCOLUMN.value, textures: [side: textureprefix, end: textureprefix + '_end']])
                         modelWorld.setText(string)
@@ -120,7 +120,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                     if (generateState)
                         blockstatefile.setText(Utilities.createSimpleBlockState(modid, blockidentifier, version))
                     break
-                case BlockStates.TOP_BOTTOM_SIDE.type:
+                case BlockState.TOP_BOTTOM_SIDE.type:
                     if (generateModels) {
                         String str = Utilities.formatJson([parent: BlockModels.BLOCKDIFFERENTTOPANDBOTTOM.value, textures: [top: textureprefix + '_top', bottom: textureprefix + '_bottom', side: textureprefix]])
                         modelWorld.setText(str)
@@ -128,7 +128,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                     if (generateState)
                         blockstatefile.setText(Utilities.createSimpleBlockState(modid, blockidentifier, version))
                     break
-                case BlockStates.DIRECTIONAL.type:
+                case BlockState.DIRECTIONAL.type:
                     if (generateState) {
                         def map = [:]
                         if (directionname) {
@@ -157,11 +157,11 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                     //TODO 1.14.4
                     if (generateModels) {
                         String inventorymodel = Utilities.createDirectionalBlockModel(modid, blockidentifier, version)
-                        if (blockstate != BlockStates.DOOR.type) inventoryblockmodel.createNewFile()
+                        if (blockstate != BlockState.DOOR.type) inventoryblockmodel.createNewFile()
                         inventoryblockmodel.setText(inventorymodel)
                     }
                     break
-                case BlockStates.HORIZONTAL.type:
+                case BlockState.HORIZONTAL.type:
                     if (generateState) {
                         def path = ''
                         if (version == '1.12')
@@ -188,7 +188,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                         modelWorld.setText(model)
                     }
                     break
-                case BlockStates.PANE.type:
+                case BlockState.PANE.type:
                     if (generateState) {
                         def conditionarray = []
                         conditionarray.add([apply: [model: "$modid:$blockidentifier" + '_post']])
@@ -236,7 +236,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                     }
 
                     break
-                case BlockStates.STAIRS.type:
+                case BlockState.STAIRS.type:
                     if (generateState) {
                         def states = [:]
                         def product = Sets.cartesianProduct(Sets.newHashSet('facing=north', 'facing=south', 'facing=east', 'facing=west'),
@@ -466,7 +466,7 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
                         outwardModel.setText(Utilities.formatJson([parent: "block/outer_stairs", textures: [bottom: modelPrefix, top: modelPrefix, side: modelPrefix]]))
                     }
                     break
-                case BlockStates.DOOR.type:
+                case BlockState.DOOR.type:
                     String modelprefix = "$modid:$blockidentifier"
                     if (generateState) {
                         def statemap = [:]
@@ -663,9 +663,9 @@ class BlockStateGenerator implements EventHandler<ActionEvent> {
 
 
             if (generateModels) {
-                if (blockstate == BlockStates.DIRECTIONAL.type)
+                if (blockstate == BlockState.DIRECTIONAL.type)
                     itemModel.setText(Utilities.createBlockInventoryModel(modid, blockidentifier))
-                else if (blockstate == BlockStates.PANE.type)
+                else if (blockstate == BlockState.PANE.type)
                     itemModel.setText(Utilities.formatJson([parent: "item/generated", textures: [layer0: "$modid:blocks/$blockidentifier"]]))
                 else
                     itemModel.setText(Utilities.createSimpleBlockItemModel(modid, blockidentifier))

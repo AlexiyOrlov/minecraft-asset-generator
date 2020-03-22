@@ -3,7 +3,7 @@ package alexiy.minecraft.assetgenerator
 /**
  * Created on 12/27/17.
  */
-enum BlockStates {
+enum BlockState {
     DOOR('Door', 'Standard door'),
     SIMPLE_BLOCK('Simple block', 'Full block with single texture'),
     DIRECTIONAL('Directional block', 'Block that can be rotated in all directions'),
@@ -22,7 +22,7 @@ enum BlockStates {
     String description
 //    String parentModel
 
-    BlockStates(String type_, String description_) {
+    BlockState(String type_, String description_) {
         type = type_
         description = description_
 //        parentModel=parentModel_

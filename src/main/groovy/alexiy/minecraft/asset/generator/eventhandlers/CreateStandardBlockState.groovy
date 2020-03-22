@@ -2,7 +2,7 @@ package alexiy.minecraft.asset.generator.eventhandlers
 
 import alexiy.minecraft.asset.generator.MinecraftVersion
 import alexiy.minecraft.assetgenerator.BlockModels
-import alexiy.minecraft.assetgenerator.BlockStates
+import alexiy.minecraft.assetgenerator.BlockState
 import alexiy.minecraft.assetgenerator.MAG
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
@@ -44,32 +44,32 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
         Button generate = new Button("Generate")
         ChoiceBox<String> version = new ChoiceBox<>(FXCollections.observableArrayList(MinecraftVersion.values()*.version)) as ChoiceBox<String>
         version.selectionModel.select(MAG.lastMinecraftVersion)
-        ChoiceBox<String> choices = new ChoiceBox<>(FXCollections.observableArrayList(BlockStates.values()*.type)) as ChoiceBox<String>
-        choices.selectionModel.select(BlockStates.SIMPLE_BLOCK.type)
-        Label description = new Label(BlockStates.SIMPLE_BLOCK.description)
+        ChoiceBox<String> choices = new ChoiceBox<>(FXCollections.observableArrayList(BlockState.values()*.type)) as ChoiceBox<String>
+        choices.selectionModel.select(BlockState.SIMPLE_BLOCK.type)
+        Label description = new Label(BlockState.SIMPLE_BLOCK.description)
         Label parentModel = new Label(BlockModels.BLOCKSINGLETEXTURE.value)
         choices.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             void handle(ActionEvent even) {
-                BlockStates blockState = BlockStates.values().find({ it -> it.type == choices.selectionModel.getSelectedItem() })
+                BlockState blockState = BlockState.values().find({ it -> it.type == choices.selectionModel.getSelectedItem() })
                 description.setText(blockState.description)
                 switch (blockState) {
-                    case BlockStates.COLUMN:
+                    case BlockState.COLUMN:
                         parentModel.setText(BlockModels.BLOCKCOLUMN.value)
                         break
-                    case BlockStates.SIMPLE_BLOCK:
+                    case BlockState.SIMPLE_BLOCK:
                         parentModel.setText(BlockModels.BLOCKSINGLETEXTURE.value)
                         break
-                    case BlockStates.CROSS:
+                    case BlockState.CROSS:
                         parentModel.setText(BlockModels.CROSS.value)
                         break
-                    case BlockStates.DIFFERENT_SIDES:
+                    case BlockState.DIFFERENT_SIDES:
                         parentModel.setText(BlockModels.BLOCKDIFFERENTSIDES.value)
                         break
-                    case BlockStates.TOP_BOTTOM_SIDE:
+                    case BlockState.TOP_BOTTOM_SIDE:
                         parentModel.setText(BlockModels.BLOCKDIFFERENTTOPANDBOTTOM.value)
                         break
-                    case BlockStates.DIRECTIONAL:
+                    case BlockState.DIRECTIONAL:
                         parentModel.setText(BlockModels.BLOCKDIRECTIONAL.value)
                         break
                     default: parentModel.setText('')

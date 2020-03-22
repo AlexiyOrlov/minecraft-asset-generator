@@ -222,7 +222,7 @@ class CreateFile implements EventHandler<ActionEvent> {
                 })
             } else if (radioButton == blockState)      //TODO
             {
-                ChoiceBox<String> blocksstates = new ChoiceBox(FXCollections.observableArrayList(BlockStates.values()*.type))
+                ChoiceBox<String> blocksstates = new ChoiceBox(FXCollections.observableArrayList(BlockState.values()*.type))
                 blocksstates.setTooltip(new Tooltip('List of preset blockstates'))
                 Button generate = new Button('Generate')
                 TextField objectidentifier
@@ -238,9 +238,9 @@ class CreateFile implements EventHandler<ActionEvent> {
                     @Override
                     void handle(ActionEvent et) {
                         def sel = blocksstates.getSelectionModel().getSelectedItem()
-                        BlockStates parentModels = BlockStates.values().find { it.type == sel }
+                        BlockState parentModels = BlockState.values().find { it.type == sel }
                         description.setText(parentModels.description)
-                        if (parentModels != BlockStates.DIRECTIONAL) {
+                        if (parentModels != BlockState.DIRECTIONAL) {
                             directionname.setVisible(false)
                         } else directionname.setVisible(true)
                     }

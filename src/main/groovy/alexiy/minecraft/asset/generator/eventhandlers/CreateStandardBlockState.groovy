@@ -51,6 +51,10 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
         choices.selectionModel.select(BlockState.SIMPLE_BLOCK)
         Label description = new Label(BlockState.SIMPLE_BLOCK.description)
         Label parentModel = new Label(BlockModel.SINGLETEXTURE.value)
+        CheckBox generateItemModel = new CheckBox("Generate item model")
+        generateItemModel.setSelected(true)
+        ChoiceBox<String> lootTable = new ChoiceBox<>(FXCollections.observableArrayList('None', 'Self', 'Save'))
+        lootTable.getSelectionModel().select(1)
         choices.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             void handle(ActionEvent even) {
@@ -164,6 +168,14 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                             modelFile.setText(modelContent)
                             new Alert2(Alert.AlertType.INFORMATION, "Created model $modelFile", ButtonType.OK).show()
                         }
+
+                        if (generateItemModel.isSelected()) {
+                            File itemModel = Paths.get(path.text, AssetConstants.ASSETS.value, modidentr, AssetConstants.MODELS_LITERAL.value, AssetConstants.ITEM_LITERAL.value, blockidenr + '.json').toFile()
+                            if (itemModel.createNewFile()) {
+                                itemModel.setText(Utilities.formatJson([parent: "$modidentr:block$blockidenr"]))
+                                new Alert2(Alert.AlertType.INFORMATION, "Created item model $itemModel", ButtonType.OK).show()
+                            }
+                        }
                     }
                     MAG.lastMinecraftVersion = minecraftVersion.version
                     println(path.text)
@@ -172,7 +184,7 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                 }
             }
         })
-        Vbox2 vbox2 = new Vbox2(modidr, blockidr, directionName, new Hbox2(setPath, path), version, new Hbox2(choices, parentModel), description, generate)
+        Vbox2 vbox2 = new Vbox2(modidr, blockidr, directionName, new Hbox2(setPath, path), version, new Hbox2(choices, parentModel), description, generateItemModel, lootTable, generate)
         Tab tab = new Tab("$modidr.text:$blockidr.text", vbox2)
         mag.tabPane.getTabs().add(tab)
     };

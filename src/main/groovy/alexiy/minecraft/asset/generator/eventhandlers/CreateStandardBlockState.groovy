@@ -176,6 +176,31 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                                 new Alert2(Alert.AlertType.INFORMATION, "Created item model $itemModel", ButtonType.OK).show()
                             }
                         }
+                        String loottable = lootTable.getSelectionModel().getSelectedItem();
+                        if (loottable != 'None') {
+                            File loot = Paths.get(path.text, AssetConstants.DATA.value, modidentr, AssetConstants.LOOT_TABLES.value, AssetConstants.BLOCKS_LITERAL.value, blockidenr + '.json').toFile()
+                            if (loot.createNewFile()) {
+                                String table = '{}'
+                                if (loottable == 'Self') {
+                                    table = Utilities.formatJson([type: "minecraft:block", pools: [
+                                            [
+                                                    rolls     : 1,
+                                                    entries   : [
+                                                            [
+                                                                    type: "minecraft:item",
+                                                                    name: "$modidentr:$blockidenr"
+                                                            ]
+                                                    ],
+                                                    conditions: [
+                                                            [condition: "minecraft:survives_explosion"]
+                                                    ]
+                                            ]
+                                    ]])
+                                }
+                                loot.setText(table)
+                                new Alert2(Alert.AlertType.INFORMATION, "Created default loot table $loot", ButtonType.OK).show()
+                            }
+                        }
                     }
                     MAG.lastMinecraftVersion = minecraftVersion.version
                     println(path.text)

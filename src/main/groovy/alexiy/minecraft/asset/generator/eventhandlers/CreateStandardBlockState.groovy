@@ -172,7 +172,7 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                         if (generateItemModel.isSelected()) {
                             File itemModel = Paths.get(path.text, AssetConstants.ASSETS.value, modidentr, AssetConstants.MODELS_LITERAL.value, AssetConstants.ITEM_LITERAL.value, blockidenr + '.json').toFile()
                             if (itemModel.createNewFile()) {
-                                itemModel.setText(Utilities.formatJson([parent: "$modidentr:block$blockidenr"]))
+                                itemModel.setText(Utilities.formatJson([parent: "$modidentr:block/$blockidenr"]))
                                 new Alert2(Alert.AlertType.INFORMATION, "Created item model $itemModel", ButtonType.OK).show()
                             }
                         }

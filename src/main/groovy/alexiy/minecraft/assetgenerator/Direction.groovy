@@ -17,8 +17,12 @@ enum Direction {
 
     Direction(String name_, int modelRotation, Axis axis_) {
         name = name_
-        rotation = modelRotation
+        rotation = (short) modelRotation
         around = axis_
+    }
+
+    static List<Direction> getHorizontals() {
+        return [NORTH, SOUTH, EAST, WEST]
     }
 }
 

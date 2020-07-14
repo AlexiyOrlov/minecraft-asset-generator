@@ -121,6 +121,19 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                             map = [variants: map]
                             blockstateContent = Utilities.formatJson(map)
                             break
+                        case BlockState.HORIZONTAL:
+                            def map = [:]
+                            def horizontals = Direction.getHorizontals()
+                            horizontals.each {
+                                String key = 'facing=' + it.name
+                                String axis = it.around.toString()
+                                if (minecraftVersion == MinecraftVersion.V1_15) {
+                                    map.put(key, [model: "$modidentr:$AssetConstants.BLOCK_LITERAL.value/$blockidenr", (axis): it.rotation])
+                                }
+                            }
+                            map = [variants: map]
+                            blockstateContent = Utilities.formatJson(map)
+                            break
                     }
                     if (blockstateContent) {
                         File file = new File("$path.text/$AssetConstants.ASSETS.value/$modidentr/$AssetConstants.BLOCKSTATES.value/$blockidenr" + '.json')

@@ -177,6 +177,12 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                                                                          textures: [bottom: "$texturePath" + '_bottom',
                                                                                     side  : "$texturePath" + '_side', platform: "$texturePath"]])
                                     break
+                                case BlockState.HORIZONTAL:
+                                    modelContent = Utilities.formatJson([parent  : BlockModel.ORIENTABLE.value,
+                                                                         textures: [top  : texturePath + '_top',
+                                                                                    front: texturePath + '_front',
+                                                                                    side : texturePath]])
+                                    break
                             }
                             modelFile.setText(modelContent)
                             new Alert2(Alert.AlertType.INFORMATION, "Created model $modelFile", ButtonType.OK).show()

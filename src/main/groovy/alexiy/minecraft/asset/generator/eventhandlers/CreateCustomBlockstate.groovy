@@ -64,6 +64,8 @@ class CreateCustomBlockstate implements EventHandler<ActionEvent> {
                         if (fullId.text && listOfProperties.text) {
                             def properties = listOfProperties.text.split(',')
                             if (properties) {
+                                String[] model = fullId.text.split(':')
+                                String modelPath = model[0] + ':' + 'block/' + model[1]
                                 properties.eachWithIndex { it, index ->
                                     TextField values = new TextField()
                                     values.setPromptText('Values')
@@ -96,7 +98,7 @@ class CreateCustomBlockstate implements EventHandler<ActionEvent> {
                                             it.each { s ->
                                                 variant += "$s,"
                                             }
-                                            map.put(variant.substring(0, variant.length() - 1), ['model': fullId.text])
+                                            map.put(variant.substring(0, variant.length() - 1), ['model': modelPath]) //TODO insert 'block'
                                         }
                                         map = ['variants': map]
                                         String output = Utilities.formatJson(map)

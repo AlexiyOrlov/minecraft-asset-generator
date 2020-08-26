@@ -215,6 +215,7 @@ class CreateRecipe implements EventHandler<ActionEvent> {
                                                         int index = hBox.childrenUnmodifiable.indexOf(labl)
                                                         TextField textField = hBox.childrenUnmodifiable.get(index + 1) as TextField
                                                         String ingred = textField.text
+                                                        final String path = ingred
                                                         if (ingred) {
                                                             if (ingred && !ingred.contains(':'))
                                                                 ingred = "minecraft:$ingred"
@@ -222,6 +223,11 @@ class CreateRecipe implements EventHandler<ActionEvent> {
                                                             if (version == MinecraftVersion.V1_12.version) {
                                                                 TextField textf = metadata.getChildrenUnmodifiable().get(index) as TextField
                                                                 input = [item: ingred, data: textf.text.toInteger()]
+                                                            } else if (path.startsWith('#')) {
+                                                                if (!path.contains(':')) {
+                                                                    input = [tag: 'minecraft:' + path.substring(1)]
+                                                                } else
+                                                                    input = [tag: path.substring(1)]
                                                             } else
                                                                 input = [item: ingred]
                                                             keymap.put(u, input)

@@ -27,6 +27,7 @@ import java.nio.file.Paths
 /**
  * Created on 8/6/17.
  */
+@Deprecated
 class JAG extends Application {
     static JAG instance
     static Rectangle2D visualScreenBounds

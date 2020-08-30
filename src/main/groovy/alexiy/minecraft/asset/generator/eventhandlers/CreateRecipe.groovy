@@ -223,7 +223,7 @@ class CreateRecipe implements EventHandler<ActionEvent> {
                                                             if (version == MinecraftVersion.V1_12.version) {
                                                                 TextField textf = metadata.getChildrenUnmodifiable().get(index) as TextField
                                                                 input = [item: ingred, data: textf.text.toInteger()]
-                                                            } else if (path.startsWith('#')) {
+                                                            } else if (path.startsWith('#')) {  //place tag
                                                                 if (!path.contains(':')) {
                                                                     input = [tag: 'minecraft:' + path.substring(1)]
                                                                 } else

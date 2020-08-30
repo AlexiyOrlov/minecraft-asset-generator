@@ -215,9 +215,37 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                                                     ]
                                             ]
                                     ]])
+                                } else if (loottable == 'Save') {
+                                    table = Utilities.formatJson([type: 'minecraft:block', pools: [
+                                            [
+                                                    rolls     : 1,
+                                                    entries   : [
+                                                            [
+                                                                    type     : 'minecraft:item',
+                                                                    name     : "$modidentr:$blockidenr",
+                                                                    functions: [
+                                                                            [
+                                                                                    function: 'minecraft:copy_nbt',
+                                                                                    source  : 'block_entity',
+                                                                                    ops     : [
+                                                                                            [
+                                                                                                    source: '',
+                                                                                                    target: 'BlockEntityTag',
+                                                                                                    op    : 'replace'
+                                                                                            ]
+                                                                                    ]
+                                                                            ]
+                                                                    ]
+                                                            ]
+                                                    ],
+                                                    conditions: [
+                                                            [condition: 'minecraft:survives_explosion']
+                                                    ]
+                                            ]
+                                    ]])
                                 }
                                 loot.setText(table)
-                                new Alert2(Alert.AlertType.INFORMATION, "Created default loot table $loot", ButtonType.OK).show()
+                                new Alert2(Alert.AlertType.INFORMATION, "Created '$loottable' loot table $loot", ButtonType.OK).show()
                             }
                         }
                     }

@@ -19,6 +19,9 @@ import java.io.File;
 import java.util.*;
 
 public class CreateAdvancement implements EventHandler<ActionEvent> {
+
+    private final MAG mag;
+
     public CreateAdvancement(MAG mag_) {
         mag = mag_;
     }
@@ -35,7 +38,7 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
             public void handle(ActionEvent et) {
                 TextField criterion = new TextField("");
                 criterion.setTooltip(new Tooltip("Criterion name"));
-                TextField trigger = new TextField(getPreviousTrigger());
+                TextField trigger = new TextField();
                 trigger.setTooltip(new Tooltip("Trigger id"));
                 Label label = new Label("Conditions:");
                 Label items = new Label("Items:");
@@ -200,17 +203,5 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
         vbox2.getChildren().addAll(identifier, new Vbox2(new Hbox2(label, title), new Hbox2(desclable, description), new Hbox2(itemLabel, displayItem)), new Hbox2(addCriterion), new Hbox2(rewards, experience, exp, addReward), rewardsContainer, generate);
         Tab tab = new Tab(MAG.getLastModId() + identifier.getText(), vbox2);
         mag.getTabPane().getTabs().add(tab);
-
     }
-
-    public String getPreviousTrigger() {
-        return previousTrigger;
-    }
-
-    public void setPreviousTrigger(String previousTrigger) {
-        this.previousTrigger = previousTrigger;
-    }
-
-    private String previousTrigger;
-    private MAG mag;
 }

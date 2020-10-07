@@ -38,7 +38,7 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
             public void handle(ActionEvent et) {
                 TextField criterion = new TextField("");
                 criterion.setTooltip(new Tooltip("Criterion name"));
-                TextField trigger = new TextField();
+                TextField trigger = new TextField(MAG.getLastAdvancementTrigger());
                 trigger.setTooltip(new Tooltip("Trigger id"));
                 Label label = new Label("Conditions:");
                 Label items = new Label("Items:");
@@ -115,7 +115,6 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
         displayItem.setTooltip(new Tooltip("Item id"));
         Button generate = new Button("Generate file");
         generate.setOnAction(new EventHandler<ActionEvent>() {
-
             @Override
             public void handle(ActionEvent evnt) {
                 LinkedHashMap<String, Object> root = new LinkedHashMap<>();
@@ -160,7 +159,9 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
                     });
                     Map<String, Object> map1 = Utilities.singleEntryMap("items", conds);
                     Map<String, Object> objectMap = new LinkedHashMap<>(2);
-                    objectMap.put("trigger", trigger.getText());
+                    String triggerText = trigger.getText();
+                    MAG.setLastAdvancementTrigger(triggerText);
+                    objectMap.put("trigger", triggerText);
                     objectMap.put("conditions", map1);
                     root.put(name.getText(), objectMap);
                 }

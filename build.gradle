@@ -26,7 +26,7 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy:3.0.0'
     implementation 'org.codehaus.groovy:groovy-json:3.0.0'
     implementation 'com.google.guava:guava:23.6-jre'
-    implementation 'org.knowbase:tools:0.4'
+    implementation 'org.knowbase:tools:0.5'
 }
 
 jar{

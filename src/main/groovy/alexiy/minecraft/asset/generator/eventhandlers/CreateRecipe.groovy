@@ -81,7 +81,7 @@ class CreateRecipe implements EventHandler<ActionEvent> {
                     string = "minecraft:$string"
                     MAG.lastModId = 'minecraft'
                 } else
-                    MAG.lastModId = string.substring(0, string.indexOf(':') + 1)
+                    MAG.lastModId = string.substring(0, string.indexOf(':'))
                 TextField resultItem = new TextField(string)
                 resultItem.setPromptText('Full recipe identifier')
                 Button selectResourceFolder = new Button('Set output folder:')

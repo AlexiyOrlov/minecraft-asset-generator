@@ -96,7 +96,7 @@ class CreateItemModel implements EventHandler<ActionEvent> {
                 Vbox2 content = new Vbox2(textField, choiceBox, variants, resourceContainer, generate)
                 Tab tab = new Tab("Item model ($id)", content)
                 mag.tabPane.getTabs().add(tab)
-                MAG.lastModId = id.substring(0, id.indexOf(':') + 1)
+                MAG.lastModId = id.substring(0, id.indexOf(':'))
             } else {
                 new Alert2(Alert.AlertType.ERROR, 'Specify an identifier for the item', ButtonType.OK).show()
             }

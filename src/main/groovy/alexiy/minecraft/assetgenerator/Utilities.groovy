@@ -136,6 +136,11 @@ class Utilities {
         recipes.mkdir()
 
 
+    }
 
+    static LinkedHashMap<String, Object> singleEntryMap(String key, Object value) {
+        LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>(1);
+        linkedHashMap.put(key, value);
+        return linkedHashMap;
     }
 }

@@ -37,6 +37,7 @@ class MAG extends Application {
     static String lastMinecraftVersion
     static String lastResourceFolder
     static String lastAdvancementTrigger
+    static String lastParentAdvancement
 
     @Override
     void start(Stage primaryStage) throws Exception {
@@ -47,6 +48,7 @@ class MAG extends Application {
         lastModId = settings.getOrDefault(LAST_MOD_ID, "minecraft:")
         lastAdvancementTrigger = settings.getOrDefault("Last trigger", "minecraft:inventory_changed")
         lastResourceFolder = settings.getOrDefault(LAST_RESOURCE_PATH, System.getProperty('user.home'))
+        lastParentAdvancement = settings.getOrDefault("Last adv. parent", "")
         visualScreenBounds = Screen.getPrimary().getVisualBounds()
         MenuItem createItemModel = new MenuItem("Item model")
         createItemModel.setOnAction(new CreateItemModel(this))
@@ -109,6 +111,7 @@ class MAG extends Application {
         settings.put(LAST_MOD_ID, lastModId)
         settings.put(LAST_RESOURCE_PATH, lastResourceFolder)
         settings.put("Last trigger", lastAdvancementTrigger)
+        settings.put("Last adv. parent", lastParentAdvancement)
         settings.save()
     }
 }

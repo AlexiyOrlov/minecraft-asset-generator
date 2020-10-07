@@ -30,6 +30,8 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         TextField identifier = new TextField();
         identifier.setTooltip(new Tooltip("Identifier"));
+        TextField parent = new TextField(MAG.getLastParentAdvancement());
+        parent.setTooltip(new Tooltip("Parent advancement"));
         final List<List<?>> criterions = new ArrayList<>();
         final Vbox2 vbox2 = new Vbox2();
         Button addCriterion = new Button("Add criterion");
@@ -189,6 +191,10 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
                     display.put("icon", Utilities.singleEntryMap("item", displayItem.getText()));
                     root.put("display", display);
                 }
+                if (!parent.getText().isEmpty()) {
+                    root.put("parent", parent.getText());
+                    MAG.setLastParentAdvancement(parent.getText());
+                }
                 DirectoryChooser directoryChooser = new DirectoryChooser();
                 directoryChooser.setInitialDirectory(new File(MAG.getLastResourceFolder()));
                 File file = directoryChooser.showDialog(MAG.getMainStage());
@@ -202,7 +208,7 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
             }
 
         });
-        vbox2.getChildren().addAll(identifier, new Vbox2(new Hbox2(label, title), new Hbox2(desclable, description), new Hbox2(itemLabel, displayItem)), new Hbox2(addCriterion), new Hbox2(rewards, experience, exp, addReward), rewardsContainer, generate);
+        vbox2.getChildren().addAll(identifier, parent, new Vbox2(new Hbox2(label, title), new Hbox2(desclable, description), new Hbox2(itemLabel, displayItem)), new Hbox2(addCriterion), new Hbox2(rewards, experience, exp, addReward), rewardsContainer, generate);
         Tab tab = new Tab(MAG.getLastModId() + identifier.getText(), vbox2);
         tab.setTooltip(new Tooltip(MAG.getLastResourceFolder()));
         mag.getTabPane().getTabs().add(tab);

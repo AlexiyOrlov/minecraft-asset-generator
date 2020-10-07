@@ -180,7 +180,8 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
                 if (!exp.getText().isEmpty()) {
                     hashMap.put("experience", Integer.parseInt(exp.getText()));
                 }
-                root.put("rewards", hashMap);
+                if (!hashMap.isEmpty())
+                    root.put("rewards", hashMap);
                 if (!title.getText().isEmpty()) {
                     LinkedHashMap<String, Object> display = new LinkedHashMap<>(3);
                     display.put("title", title.getText());

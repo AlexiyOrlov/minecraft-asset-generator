@@ -152,7 +152,6 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
                         } else {
                             if (Integer.parseInt(cnt) > 1) {
                                 linkedHashMap.put("min", Integer.parseInt(cnt));
-                                linkedHashMap.put("max", 64);
                             }
                         }
                         if (!linkedHashMap.isEmpty())

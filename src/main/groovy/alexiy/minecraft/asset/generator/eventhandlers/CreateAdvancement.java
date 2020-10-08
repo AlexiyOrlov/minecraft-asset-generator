@@ -3,6 +3,7 @@ package alexiy.minecraft.asset.generator.eventhandlers;
 import alexiy.minecraft.assetgenerator.MAG;
 import alexiy.minecraft.assetgenerator.Utilities;
 import com.google.common.collect.ArrayListMultimap;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -40,8 +41,12 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
             public void handle(ActionEvent et) {
                 TextField criterion = new TextField("");
                 criterion.setTooltip(new Tooltip("Criterion name"));
-                TextField trigger = new TextField(MAG.getLastAdvancementTrigger());
-                trigger.setTooltip(new Tooltip("Trigger id"));
+                ChoiceBox<AdvancementTrigger> advancementTriggerChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList(AdvancementTrigger.values()));
+                advancementTriggerChoiceBox.getSelectionModel().select(0);
+                advancementTriggerChoiceBox.setTooltip(new Tooltip("Trigger id"));
+                advancementTriggerChoiceBox.setOnAction(event1 -> {
+                    System.out.println(advancementTriggerChoiceBox.getSelectionModel().getSelectedItem());
+                });
                 Label label = new Label("Conditions:");
                 Label items = new Label("Items:");
                 Vbox2 itemArray = new Vbox2();
@@ -50,7 +55,7 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
                 TextField count = new TextField("1");
                 itemArray.getChildren().addAll(itemid, count);
                 final FlowPane flowPane = new FlowPane(itemArray);
-                vbox2.getChildren().addAll(criterion, trigger, label, new Hbox2(items, flowPane));
+                vbox2.getChildren().addAll(criterion, advancementTriggerChoiceBox, label, new Hbox2(items, flowPane));
                 Button addItem = new Button("Add item");
                 addItem.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
@@ -65,7 +70,7 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
 
                 });
                 vbox2.getChildren().addAll(addItem);
-                List<Region> criterionInfo = new ArrayList<>(Arrays.asList(criterion, trigger, flowPane));
+                List<Region> criterionInfo = new ArrayList<>(Arrays.asList(criterion, advancementTriggerChoiceBox, flowPane));
                 criterions.add(criterionInfo);
                 mag.getTabPane().requestLayout();
             }

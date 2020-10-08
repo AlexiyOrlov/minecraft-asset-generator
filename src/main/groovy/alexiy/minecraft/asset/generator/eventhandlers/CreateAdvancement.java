@@ -71,6 +71,12 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
                             break;
                         case KILLED_ENTITY:
                             Label entityLabel = new Label("Entity:");
+                            TextField identifier = new TextField();
+                            identifier.setTooltip(new Tooltip("Entity identifier"));
+                            Hbox2 container = new Hbox2(entityLabel, identifier);
+                            vbox2.getChildren().addAll(container);
+                            criterions.add(new ArrayList<>(Arrays.asList(criterion, advancementTriggerChoiceBox, container)));
+                            mag.getTabPane().requestLayout();
                             break;
                     }
                     MAG.setLastAdvancementTrigger(trigger.name());
@@ -132,6 +138,7 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
                     Pane conditions = (Pane) list.get(2);
                     AdvancementTrigger advancementTrigger = trigger.getSelectionModel().getSelectedItem();
                     Map<String, Object> objectMap = new LinkedHashMap<>(2);
+                    String criterionName = name.getText();
                     switch (advancementTrigger) {
                         case INVENTORY_CHANGED:
                             List<Object> conds = new ArrayList<>();
@@ -171,7 +178,16 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
                             Map<String, Object> map1 = Utilities.singleEntryMap("items", conds);
                             objectMap.put("trigger", advancementTrigger.identifier);
                             objectMap.put("conditions", map1);
-                            root.put(name.getText(), objectMap);
+                            root.put(criterionName, objectMap);
+                            break;
+                        case KILLED_ENTITY:
+                            TextField entityId = (TextField) conditions.getChildren().get(1);
+                            String idString = entityId.getText();
+                            Map<String, Object> mapp = new LinkedHashMap<>(2);
+                            mapp.put("trigger", advancementTrigger.identifier);
+                            mapp.put("conditions", Utilities.singleEntryMap("entity", Utilities.singleEntryMap("type", idString)));
+                            root.put(criterionName, mapp);
+                            break;
                     }
                 }
                 ArrayListMultimap<String, Object> listMultimap = ArrayListMultimap.create();

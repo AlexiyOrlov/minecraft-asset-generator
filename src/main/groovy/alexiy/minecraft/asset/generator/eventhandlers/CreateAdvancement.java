@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.DirectoryChooser;
 import org.knowbase.Alert2;
@@ -42,39 +43,42 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
                 TextField criterion = new TextField("");
                 criterion.setTooltip(new Tooltip("Criterion name"));
                 ChoiceBox<AdvancementTrigger> advancementTriggerChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList(AdvancementTrigger.values()));
-                advancementTriggerChoiceBox.getSelectionModel().select(0);
                 advancementTriggerChoiceBox.setTooltip(new Tooltip("Trigger id"));
                 advancementTriggerChoiceBox.setOnAction(event1 -> {
-                    System.out.println(advancementTriggerChoiceBox.getSelectionModel().getSelectedItem());
+                    AdvancementTrigger trigger = advancementTriggerChoiceBox.getSelectionModel().getSelectedItem();
+                    switch (trigger) {
+                        case INVENTORY_CHANGED:
+                            Label items = new Label("Items:");
+                            Vbox2 itemArray = new Vbox2();
+                            TextField itemid = new TextField();
+                            itemid.setTooltip(new Tooltip("Item identifier"));
+                            TextField count = new TextField("1");
+                            itemArray.getChildren().addAll(itemid, count);
+                            final FlowPane flowPane = new FlowPane(itemArray);
+                            Button addItem = new Button("Add item");
+                            addItem.setOnAction(evnt -> {
+                                TextField textField = new TextField();
+                                textField.setTooltip(new Tooltip("Item identifier or tag (#x)"));
+                                TextField itemAmount = new TextField("1");
+                                itemAmount.setTooltip(new Tooltip("Exact number or range (x-y)"));
+                                flowPane.getChildren().add(new Vbox2(textField, itemAmount));
+                                mag.getTabPane().requestLayout();
+                            });
+                            vbox2.getChildren().addAll(new Hbox2(items, flowPane, addItem));
+                            List<Region> criterionInfo = new ArrayList<>(Arrays.asList(criterion, advancementTriggerChoiceBox, flowPane));
+                            criterions.add(criterionInfo);
+                            mag.getTabPane().requestLayout();
+                            break;
+                        case KILLED_ENTITY:
+                            Label entityLabel = new Label("Entity:");
+                            break;
+                    }
+                    MAG.setLastAdvancementTrigger(trigger.name());
                 });
                 Label label = new Label("Conditions:");
-                Label items = new Label("Items:");
-                Vbox2 itemArray = new Vbox2();
-                TextField itemid = new TextField();
-                itemid.setTooltip(new Tooltip("Item identifier"));
-                TextField count = new TextField("1");
-                itemArray.getChildren().addAll(itemid, count);
-                final FlowPane flowPane = new FlowPane(itemArray);
-                vbox2.getChildren().addAll(criterion, advancementTriggerChoiceBox, label, new Hbox2(items, flowPane));
-                Button addItem = new Button("Add item");
-                addItem.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent evnt) {
-                        TextField textField = new TextField();
-                        textField.setTooltip(new Tooltip("Item identifier or tag (#x)"));
-                        TextField itemAmount = new TextField("1");
-                        itemAmount.setTooltip(new Tooltip("Exact number or range (x-y)"));
-                        flowPane.getChildren().add(new Vbox2(textField, itemAmount));
-                        mag.getTabPane().requestLayout();
-                    }
-
-                });
-                vbox2.getChildren().addAll(addItem);
-                List<Region> criterionInfo = new ArrayList<>(Arrays.asList(criterion, advancementTriggerChoiceBox, flowPane));
-                criterions.add(criterionInfo);
+                vbox2.getChildren().addAll(criterion, advancementTriggerChoiceBox, label);
                 mag.getTabPane().requestLayout();
             }
-
         });
 
         Label rewards = new Label("Rewards:");
@@ -83,32 +87,29 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
         TextField exp = new TextField();
         exp.setTooltip(new Tooltip("Integer"));
         Button addReward = new Button("Add reward");
-        addReward.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent evt) {
-                TextInputDialog rewardType = new TextInputDialog("loot");
-                rewardType.setTitle("Reward type");
-                rewardType.setHeaderText("'loot' or 'recipes'");
-                Optional<String> click = rewardType.showAndWait();
-                if (click.isPresent()) {
-                    String type = click.get();
-                    Label typeLabel = new Label(type);
-                    switch (type) {
-                        case "loot":
-                            final TextField lootTable = new TextField(MAG.getLastModId());
-                            lootTable.setTooltip(new Tooltip("Loot table id"));
-                            rewardsContainer.getChildren().addAll(typeLabel, lootTable);
-                            break;
-                        case "recipes":
-                            TextField recipe = new TextField(MAG.getLastModId());
-                            recipe.setTooltip(new Tooltip("Recipe id"));
-                            rewardsContainer.getChildren().addAll(typeLabel, recipe);
-                            break;
-                        default:
-                            new Alert2(Alert.AlertType.WARNING, "Invalid reward: " + type).show();
-                    }
-                    mag.getTabPane().requestLayout();
+        addReward.setOnAction(evt -> {
+            TextInputDialog rewardType = new TextInputDialog("loot");
+            rewardType.setTitle("Reward type");
+            rewardType.setHeaderText("'loot' or 'recipes'");
+            Optional<String> click = rewardType.showAndWait();
+            if (click.isPresent()) {
+                String type = click.get();
+                Label typeLabel = new Label(type);
+                switch (type) {
+                    case "loot":
+                        final TextField lootTable = new TextField(MAG.getLastModId());
+                        lootTable.setTooltip(new Tooltip("Loot table id"));
+                        rewardsContainer.getChildren().addAll(typeLabel, lootTable);
+                        break;
+                    case "recipes":
+                        TextField recipe = new TextField(MAG.getLastModId());
+                        recipe.setTooltip(new Tooltip("Recipe id"));
+                        rewardsContainer.getChildren().addAll(typeLabel, recipe);
+                        break;
+                    default:
+                        new Alert2(Alert.AlertType.WARNING, "Invalid reward: " + type).show();
                 }
+                mag.getTabPane().requestLayout();
             }
         });
 
@@ -127,49 +128,51 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
                 LinkedHashMap<String, Object> root = new LinkedHashMap<>();
                 for (List<?> list : criterions) {
                     TextField name = (TextField) list.get(0);
-                    TextField trigger = (TextField) list.get(1);
-                    FlowPane conditions = (FlowPane) list.get(2);
-                    List<Object> conds = new ArrayList<>();
-                    conditions.getChildren().forEach(node -> {
-                        LinkedHashMap<String, Object> map = new LinkedHashMap<>(1);
-                        Vbox2 condition = (Vbox2) node;
-                        TextField itemId = (TextField) condition.getChildren().get(0);
-                        TextField count = (TextField) condition.getChildren().get(1);
-                        String item = itemId.getText();
-                        if (item.startsWith("#")) {
-                            String sub = item.substring(1);
-                            if (!sub.contains(":"))
-                                sub = "minecraft:" + sub;
-                            map.put("tag", sub);
-                        } else {
-                            if (!item.contains(":")) {
-                                String s = "minecraft:" + item;
-                                map.put("item", s);
-                            } else
-                                map.put("item", item);
-                        }
-                        String cnt = count.getText();
-                        LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>(1);
-                        if (cnt.contains("-")) {
-                            String[] strings = cnt.split("-");
-                            linkedHashMap.put("min", strings[0]);
-                            linkedHashMap.put("max", strings[1]);
-                        } else {
-                            if (Integer.parseInt(cnt) > 1) {
-                                linkedHashMap.put("min", Integer.parseInt(cnt));
-                            }
-                        }
-                        if (!linkedHashMap.isEmpty())
-                            map.put("count", linkedHashMap);
-                        conds.add(map);
-                    });
-                    Map<String, Object> map1 = Utilities.singleEntryMap("items", conds);
+                    ChoiceBox<AdvancementTrigger> trigger = (ChoiceBox<AdvancementTrigger>) list.get(1);
+                    Pane conditions = (Pane) list.get(2);
+                    AdvancementTrigger advancementTrigger = trigger.getSelectionModel().getSelectedItem();
                     Map<String, Object> objectMap = new LinkedHashMap<>(2);
-                    String triggerText = trigger.getText();
-                    MAG.setLastAdvancementTrigger(triggerText);
-                    objectMap.put("trigger", triggerText);
-                    objectMap.put("conditions", map1);
-                    root.put(name.getText(), objectMap);
+                    switch (advancementTrigger) {
+                        case INVENTORY_CHANGED:
+                            List<Object> conds = new ArrayList<>();
+                            conditions.getChildren().forEach(node -> {
+                                LinkedHashMap<String, Object> map = new LinkedHashMap<>(1);
+                                Vbox2 condition = (Vbox2) node;
+                                TextField itemId = (TextField) condition.getChildren().get(0);
+                                TextField count = (TextField) condition.getChildren().get(1);
+                                String item = itemId.getText();
+                                if (item.startsWith("#")) {
+                                    String sub = item.substring(1);
+                                    if (!sub.contains(":"))
+                                        sub = "minecraft:" + sub;
+                                    map.put("tag", sub);
+                                } else {
+                                    if (!item.contains(":")) {
+                                        String s = "minecraft:" + item;
+                                        map.put("item", s);
+                                    } else
+                                        map.put("item", item);
+                                }
+                                String cnt = count.getText();
+                                LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>(1);
+                                if (cnt.contains("-")) {
+                                    String[] strings = cnt.split("-");
+                                    linkedHashMap.put("min", strings[0]);
+                                    linkedHashMap.put("max", strings[1]);
+                                } else {
+                                    if (Integer.parseInt(cnt) > 1) {
+                                        linkedHashMap.put("min", Integer.parseInt(cnt));
+                                    }
+                                }
+                                if (!linkedHashMap.isEmpty())
+                                    map.put("count", linkedHashMap);
+                                conds.add(map);
+                            });
+                            Map<String, Object> map1 = Utilities.singleEntryMap("items", conds);
+                            objectMap.put("trigger", advancementTrigger.identifier);
+                            objectMap.put("conditions", map1);
+                            root.put(name.getText(), objectMap);
+                    }
                 }
                 ArrayListMultimap<String, Object> listMultimap = ArrayListMultimap.create();
                 ObservableList<Node> childrenUnmodifiable = rewardsContainer.getChildrenUnmodifiable();

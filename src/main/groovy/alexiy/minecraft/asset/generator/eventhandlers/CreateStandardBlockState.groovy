@@ -172,7 +172,7 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                                                                          textures: [top : texturePath + '_top', bottom: texturePath + '_bottom',
                                                                                     side: texturePath]])
                                     break
-                                case BlockState.DIRECTIONAL:
+                                case BlockState.DIRECTIONAL: //TODO redo
                                     modelContent = Utilities.formatJson([parent  : BlockModel.DIRECTIONAL.value,
                                                                          textures: [bottom: "$texturePath" + '_bottom',
                                                                                     side  : "$texturePath" + '_side', platform: "$texturePath"]])

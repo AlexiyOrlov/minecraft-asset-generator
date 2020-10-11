@@ -236,7 +236,7 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
 
         });
         vbox2.getChildren().addAll(identifier, parent, new Vbox2(new Hbox2(label, title), new Hbox2(desclable, description), new Hbox2(itemLabel, displayItem)), new Hbox2(addCriterion), new Hbox2(rewards, experience, exp, addReward), rewardsContainer, generate);
-        Tab tab = new Tab(MAG.getLastModId() + identifier.getText(), vbox2);
+        Tab tab = new Tab(MAG.getLastModId() + identifier.getText(), new ScrollPane(vbox2));
         tab.setTooltip(new Tooltip(MAG.getLastResourceFolder()));
         mag.getTabPane().getTabs().add(tab);
     }

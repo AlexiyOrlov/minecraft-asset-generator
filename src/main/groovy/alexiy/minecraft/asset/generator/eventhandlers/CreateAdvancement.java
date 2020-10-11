@@ -37,54 +37,51 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
         final List<List<?>> criterions = new ArrayList<>();
         final Vbox2 vbox2 = new Vbox2();
         Button addCriterion = new Button("Add criterion");
-        addCriterion.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent et) {
-                TextField criterion = new TextField("");
-                criterion.setTooltip(new Tooltip("Criterion name"));
-                ChoiceBox<AdvancementTrigger> advancementTriggerChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList(AdvancementTrigger.values()));
-                advancementTriggerChoiceBox.setTooltip(new Tooltip("Trigger id"));
-                advancementTriggerChoiceBox.setOnAction(event1 -> {
-                    AdvancementTrigger trigger = advancementTriggerChoiceBox.getSelectionModel().getSelectedItem();
-                    switch (trigger) {
-                        case INVENTORY_CHANGED:
-                            Label items = new Label("Items:");
-                            Vbox2 itemArray = new Vbox2();
-                            TextField itemid = new TextField();
-                            itemid.setTooltip(new Tooltip("Item identifier"));
-                            TextField count = new TextField("1");
-                            itemArray.getChildren().addAll(itemid, count);
-                            final FlowPane flowPane = new FlowPane(itemArray);
-                            Button addItem = new Button("Add item");
-                            addItem.setOnAction(evnt -> {
-                                TextField textField = new TextField();
-                                textField.setTooltip(new Tooltip("Item identifier or tag (#x)"));
-                                TextField itemAmount = new TextField("1");
-                                itemAmount.setTooltip(new Tooltip("Exact number or range (x-y)"));
-                                flowPane.getChildren().add(new Vbox2(textField, itemAmount));
-                                mag.getTabPane().requestLayout();
-                            });
-                            vbox2.getChildren().addAll(new Hbox2(items, flowPane, addItem));
-                            List<Region> criterionInfo = new ArrayList<>(Arrays.asList(criterion, advancementTriggerChoiceBox, flowPane));
-                            criterions.add(criterionInfo);
+        addCriterion.setOnAction(et -> {
+            TextField criterion = new TextField("");
+            criterion.setTooltip(new Tooltip("Criterion name"));
+            ChoiceBox<AdvancementTrigger> advancementTriggerChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList(AdvancementTrigger.values()));
+            advancementTriggerChoiceBox.setTooltip(new Tooltip("Trigger id"));
+            advancementTriggerChoiceBox.setOnAction(event1 -> {
+                AdvancementTrigger trigger = advancementTriggerChoiceBox.getSelectionModel().getSelectedItem();
+                switch (trigger) {
+                    case INVENTORY_CHANGED:
+                        Label items = new Label("Items:");
+                        Vbox2 itemArray = new Vbox2();
+                        TextField itemid = new TextField();
+                        itemid.setTooltip(new Tooltip("Item identifier"));
+                        TextField count = new TextField("1");
+                        itemArray.getChildren().addAll(itemid, count);
+                        final FlowPane flowPane = new FlowPane(itemArray);
+                        Button addItem = new Button("Add item");
+                        addItem.setOnAction(evnt -> {
+                            TextField textField = new TextField();
+                            textField.setTooltip(new Tooltip("Item identifier or tag (#x)"));
+                            TextField itemAmount = new TextField("1");
+                            itemAmount.setTooltip(new Tooltip("Exact number or range (x-y)"));
+                            flowPane.getChildren().add(new Vbox2(textField, itemAmount));
                             mag.getTabPane().requestLayout();
-                            break;
-                        case KILLED_ENTITY:
-                            Label entityLabel = new Label("Entity:");
-                            TextField identifier = new TextField();
-                            identifier.setTooltip(new Tooltip("Entity identifier"));
-                            Hbox2 container = new Hbox2(entityLabel, identifier);
-                            vbox2.getChildren().addAll(container);
-                            criterions.add(new ArrayList<>(Arrays.asList(criterion, advancementTriggerChoiceBox, container)));
-                            mag.getTabPane().requestLayout();
-                            break;
-                    }
-                    MAG.setLastAdvancementTrigger(trigger.name());
-                });
-                Label label = new Label("Conditions:");
-                vbox2.getChildren().addAll(criterion, advancementTriggerChoiceBox, label);
-                mag.getTabPane().requestLayout();
-            }
+                        });
+                        vbox2.getChildren().addAll(new Hbox2(items, flowPane, addItem));
+                        List<Region> criterionInfo = new ArrayList<>(Arrays.asList(criterion, advancementTriggerChoiceBox, flowPane));
+                        criterions.add(criterionInfo);
+                        mag.getTabPane().requestLayout();
+                        break;
+                    case KILLED_ENTITY:
+                        Label entityLabel = new Label("Entity:");
+                        TextField identifier1 = new TextField();
+                        identifier1.setTooltip(new Tooltip("Entity identifier"));
+                        Hbox2 container = new Hbox2(entityLabel, identifier1);
+                        vbox2.getChildren().addAll(container);
+                        criterions.add(new ArrayList<>(Arrays.asList(criterion, advancementTriggerChoiceBox, container)));
+                        mag.getTabPane().requestLayout();
+                        break;
+                }
+                MAG.setLastAdvancementTrigger(trigger.name());
+            });
+            Label label = new Label("Conditions:");
+            vbox2.getChildren().addAll(criterion, advancementTriggerChoiceBox, label);
+            mag.getTabPane().requestLayout();
         });
 
         Label rewards = new Label("Rewards:");

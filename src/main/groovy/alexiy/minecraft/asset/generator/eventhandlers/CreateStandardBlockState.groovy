@@ -78,7 +78,7 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                 }
             }
         })
-        generate.setOnAction(new EventHandler<ActionEvent>() {
+        generate.setOnAction new EventHandler<ActionEvent>() {
             @Override
             void handle(ActionEvent evnt) {
                 String modidentr = modidr.text
@@ -105,18 +105,27 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                         case BlockState.TOP_BOTTOM_SIDE:
                         case BlockState.COLUMN:
                             blockstateContent = createSimpleBlockstate(minecraftVersion, modidentr, blockidenr)
-                            break
+                            break;
                         case BlockState.DIRECTIONAL:
-                            def map = [:]
+                            def map = [:];
                             if (directionname) {
-                                Direction.values().each {
-                                    String direction = directionname + '=' + it.name
-                                    String axis = it.around.toString()
-                                    if (minecraftVersion == MinecraftVersion.V1_12)
-                                        map.put(direction, [model: "$modidentr:$blockidenr", (axis): it.rotation])
-                                    else if (minecraftVersion == MinecraftVersion.V1_15)
-                                        map.put(direction, [model: "$modidentr:$AssetConstants.BLOCK_LITERAL.value/$blockidenr", (axis): it.rotation])
-                                }
+                                //v. 1.15+
+                                map += [(directionname + '=north'):
+                                                [model: "$modidentr:block/$blockidenr", x: 90]
+                                ]
+                                map += [(directionname + '=south'): [model: "$modidentr:block/$blockidenr", x: 90, y: 180]]
+                                map += [(directionname + '=up'): [model: "$modidentr:block/$blockidenr"]]
+                                map += [(directionname + '=down'): [model: "$modidentr:block/$blockidenr", x: 180]]
+                                map += [(directionname + '=east'): [model: "$modidentr:block/$blockidenr", x: 90, y: 90]]
+                                map += [(directionname + '=west'): [model: "$modidentr:block/$blockidenr", x: 90, y: 270]]
+//                                Direction.values().each {
+//                                    String direction = directionname + '=' + it.name
+//                                    String axis = it.around.toString()
+//                                    if (minecraftVersion == MinecraftVersion.V1_12)
+//                                        map.put(direction, [model: "$modidentr:$blockidenr", (axis): it.rotation])
+//                                    else if (minecraftVersion == MinecraftVersion.V1_15)
+//                                        map.put(direction, [model: "$modidentr:$AssetConstants.BLOCK_LITERAL.value/$blockidenr", (axis): it.rotation])
+//                                }
                             }
                             map = [variants: map]
                             blockstateContent = Utilities.formatJson(map)
@@ -173,9 +182,9 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                                                                                     side: texturePath]])
                                     break
                                 case BlockState.DIRECTIONAL: //TODO redo
-                                    modelContent = Utilities.formatJson([parent  : BlockModel.DIRECTIONAL.value,
-                                                                         textures: [bottom: "$texturePath" + '_bottom',
-                                                                                    side  : "$texturePath" + '_side', platform: "$texturePath"]])
+                                    modelContent = Utilities.formatJson([parent  : BlockModel.COLUMN.value,
+                                                                         textures: [down: "$texturePath" + '_bottom',
+                                                                                    side: "$texturePath", up: "$texturePath" + '_top']])
                                     break
                                 case BlockState.HORIZONTAL:
                                     modelContent = Utilities.formatJson([parent  : BlockModel.ORIENTABLE.value,
@@ -255,7 +264,7 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                     println(parent.name())
                 }
             }
-        })
+        }
         Vbox2 vbox2 = new Vbox2(modidr, blockidr, directionName, new Hbox2(setPath, path), version, new Hbox2(choices, parentModel), description, generateItemModel, lootTable, generate)
         Tab tab = new Tab("$modidr.text:$blockidr.text", vbox2)
         mag.tabPane.getTabs().add(tab)

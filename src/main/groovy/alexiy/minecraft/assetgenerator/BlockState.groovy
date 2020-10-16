@@ -6,7 +6,7 @@ package alexiy.minecraft.assetgenerator
 enum BlockState {
     DOOR('Door', 'Standard door', null),
     SIMPLE_BLOCK('Simple block', 'Full block with single texture', BlockModel.SINGLETEXTURE),
-    DIRECTIONAL('Directional block', 'Block that can be rotated in all directions', BlockModel.DIRECTIONAL),
+    DIRECTIONAL('Directional block', 'Block that can be rotated in all directions', BlockModel.COLUMN),
     COLUMN('Column', 'Block with one texture for top and bottom, and second texture for sides', BlockModel.COLUMN),
     TOP_BOTTOM_SIDE('Column B', 'Block with one texture for top, second texture for bottom, third texture for sides', BlockModel.DIFFERENT_TOPANDBOTTOM),
     HORIZONTAL('Horizontal', 'Block which can be rotated in horizontal directions; one texture for front, second texture for top,third texture for other sides', BlockModel.ORIENTABLE),

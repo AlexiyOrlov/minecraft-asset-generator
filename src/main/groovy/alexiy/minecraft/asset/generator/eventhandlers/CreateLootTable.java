@@ -2,10 +2,15 @@ package alexiy.minecraft.asset.generator.eventhandlers;
 
 import alexiy.minecraft.assetgenerator.MAG;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import org.knowbase.Vbox2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateLootTable implements EventHandler<ActionEvent> {
     private final MAG mag;
@@ -24,6 +29,7 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
         Button addLootPool = new Button("Add loot pool");
         Vbox2 lootPool = new Vbox2();
         lootPool.getChildren().addAll(pools, choiceBox, addLootPool);
+        List<Vbox2> lootEntries = new ArrayList<>();
         addLootPool.setOnAction(event1 -> {
             TextField rolls = new TextField("1");
             rolls.setTooltip(new Tooltip("Roll count"));
@@ -35,21 +41,18 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
             addEntry.setOnAction(event2 -> {
                 ChoiceBox<LootEntryType> lootTableTypes = new ChoiceBox<>(FXCollections.observableArrayList(LootEntryType.values()));
                 lootTableTypes.setTooltip(new Tooltip("Type"));
-                lootEntry.getChildren().add(lootTableTypes);
+                TextField textField = new TextField();
+                Label entryLabel = new Label("Loot entry:");
+                lootEntry.getChildren().addAll(entryLabel, lootTableTypes, textField);
                 lootTableTypes.setOnAction(event3 -> {
                     switch (lootTableTypes.getSelectionModel().getSelectedItem()) {
                         case ITEM:
-                            TextField textField = new TextField();
                             textField.setTooltip(new Tooltip("Item identifier"));
-                            lootEntry.getChildren().add(textField);
                             break;
                         case TAG:
-                            TextField textField11 = new TextField();
-                            textField11.setTooltip(new Tooltip("Item tag"));
-                            lootEntry.getChildren().add(textField11);
+                            textField.setTooltip(new Tooltip("Item tag"));
                             break;
                     }
-                    lootTableTypes.getSelectionModel().clearSelection();
                     mag.getTabPane().requestLayout();
                 });
                 Label functions = new Label("Functions");
@@ -69,11 +72,15 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                 lootEntry.getChildren().addAll(functions, functionChoiceBox);
                 mag.getTabPane().requestLayout();
             });
+            lootEntries.add(lootEntry);
             mag.getTabPane().requestLayout();
         });
         Button generate = new Button("Generate");
         generate.setOnAction(event1 -> {
-
+            lootEntries.forEach(vbox2 -> {
+                ObservableList<Node> children = vbox2.getChildren();
+                System.out.println(children);
+            });
         });
         lootPool.getChildren().add(generate);
         Tab tab = new Tab(MAG.getLastModId(), lootPool);

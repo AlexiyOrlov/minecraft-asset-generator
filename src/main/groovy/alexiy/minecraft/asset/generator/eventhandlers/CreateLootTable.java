@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import org.knowbase.Alert2;
 import org.knowbase.Hbox2;
@@ -34,9 +35,9 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
         choiceBox.getSelectionModel().select(0);
         Label pools = new Label("Loot Pools:");
         Button addLootPool = new Button("Add loot pool");
-        Vbox2 lootPool = new Vbox2(identifier);
-        lootPool.getChildren().addAll(pools, choiceBox, addLootPool);
+        Vbox2 lootPool = new Vbox2();
         List<Vbox2> lootEntries = new ArrayList<>();
+        List<VBox> lootPools = new ArrayList<>();
         addLootPool.setOnAction(event1 -> {
             TextField rolls = new TextField("1");
             rolls.setTooltip(new Tooltip("Roll count"));
@@ -142,7 +143,7 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
             }
         });
         lootPool.getChildren().addAll(generate);
-        Tab tab = new Tab(MAG.getLastModId(), lootPool);
+        Tab tab = new Tab(MAG.getLastModId(), new Vbox2(identifier, choiceBox, addLootPool, pools, lootPool));
         mag.getTabPane().getTabs().add(tab);
     }
 }

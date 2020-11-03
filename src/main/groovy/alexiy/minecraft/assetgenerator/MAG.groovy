@@ -64,6 +64,8 @@ class MAG extends Application {
         createStandardBlockstate.setOnAction(new CreateStandardBlockState(this))
         MenuItem createAdvancement = new MenuItem('Advancement')
         createAdvancement.setOnAction(new CreateAdvancement(this))
+        MenuItem createLootTable = new MenuItem("Loot table")
+        createLootTable.setOnAction(new CreateLootTable(this))
         MenuItem checkFiles = new MenuItem("Validate files")
         checkFiles.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -118,7 +120,7 @@ class MAG extends Application {
         })
 
         Menu files = new Menu("Files", null, createAssetFolders, createItemModel, createRecipe, createCustomBlockstate,
-                createStandardBlockstate, createAdvancement, checkFiles)
+                createStandardBlockstate, createAdvancement, createLootTable, checkFiles)
         menuBar = new MenuBar(files)
         tabPane = new TabPane()
         rootBox = new Vbox2(menuBar, tabPane)

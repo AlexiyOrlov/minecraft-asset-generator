@@ -17,6 +17,7 @@ import org.knowbase.Vbox2;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -35,10 +36,12 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
         choiceBox.getSelectionModel().select(0);
         Label pools = new Label("Loot Pools:");
         Button addLootPool = new Button("Add loot pool");
-        Vbox2 lootPool = new Vbox2();
-        List<Vbox2> lootEntries = new ArrayList<>();
         List<VBox> lootPools = new ArrayList<>();
+        HashMap<VBox, List<Vbox2>> poolsToEntries = new HashMap<>();
+        VBox lootPoolBox = new Vbox2();
         addLootPool.setOnAction(event1 -> {
+            List<Vbox2> lootEntries = new ArrayList<>();
+            Vbox2 lootPool = new Vbox2();
             TextField rolls = new TextField("1");
             rolls.setTooltip(new Tooltip("Roll count"));
             Label entries = new Label("Loot entries");
@@ -81,47 +84,52 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                 lootEntries.add(lootEntry);
                 mag.getTabPane().requestLayout();
             });
+            lootPools.add(lootPool);
+            lootPoolBox.getChildren().add(lootPool);
+            poolsToEntries.put(lootPool, lootEntries);
             mag.getTabPane().requestLayout();
         });
         Button generate = new Button("Generate");
         generate.setOnAction(event1 -> {
             LinkedHashMap<String, Object> poolMap = Utilities.singleEntryMap("type", choiceBox.getSelectionModel().getSelectedItem().type);
             List<Object> poollist = new ArrayList<>();
-            List<Object> entries = new ArrayList<>();
-            TextField rolls = (TextField) lootPool.getChildrenUnmodifiable().get(5);
-            LinkedHashMap<String, Object> entrymap = Utilities.singleEntryMap("rolls", Integer.parseInt(rolls.getText()));
-            lootEntries.forEach(vbox2 -> {
-                ObservableList<Node> children = vbox2.getChildren();
-                ChoiceBox<LootEntryType> lootEntryType = (ChoiceBox<LootEntryType>) children.get(1);
-                TextField value = (TextField) children.get(2);
-                List<Node> functions = children.subList(5, children.size());
-                ArrayList<LinkedHashMap<String, Object>> functionList = new ArrayList<>();
-                for (int i = 0; i < functions.size(); i += 3) {
-                    HBox hBox = (HBox) functions.get(i);
-                    ObservableList<Node> childrenUnmodifiable = hBox.getChildrenUnmodifiable();
-                    Label label = (Label) childrenUnmodifiable.get(0);
-                    switch (label.getText()) {
-                        case "set_count":
-                            TextField minimum = (TextField) childrenUnmodifiable.get(1);
-                            TextField maximum = (TextField) childrenUnmodifiable.get(2);
-                            LinkedHashMap<String, Integer> counts = new LinkedHashMap<>();
-                            counts.put("min", Integer.parseInt(minimum.getText()));
-                            counts.put("max", Integer.parseInt(maximum.getText()));
-                            LinkedHashMap<String, Object> functs = Utilities.singleEntryMap("function", label.getText());
-                            functs.put("count", counts);
-                            functionList.add(functs);
-                            break;
+            lootPools.forEach(vBox -> {
+                List<Object> entries = new ArrayList<>();
+                TextField rolls = (TextField) vBox.getChildrenUnmodifiable().get(0);
+                LinkedHashMap<String, Object> entrymap = Utilities.singleEntryMap("rolls", Integer.parseInt(rolls.getText()));
+                poolsToEntries.get(vBox).forEach(vbox2 -> {
+
+                    ObservableList<Node> children = vbox2.getChildren();
+                    ChoiceBox<LootEntryType> lootEntryType = (ChoiceBox<LootEntryType>) children.get(1);
+                    TextField value = (TextField) children.get(2);
+                    List<Node> functions = children.subList(5, children.size());
+                    ArrayList<LinkedHashMap<String, Object>> functionList = new ArrayList<>();
+                    for (int i = 0; i < functions.size(); i += 3) {
+                        HBox hBox = (HBox) functions.get(i);
+                        ObservableList<Node> childrenUnmodifiable = hBox.getChildrenUnmodifiable();
+                        Label label = (Label) childrenUnmodifiable.get(0);
+                        switch (label.getText()) {
+                            case "set_count":
+                                TextField minimum = (TextField) childrenUnmodifiable.get(1);
+                                TextField maximum = (TextField) childrenUnmodifiable.get(2);
+                                LinkedHashMap<String, Integer> counts = new LinkedHashMap<>();
+                                counts.put("min", Integer.parseInt(minimum.getText()));
+                                counts.put("max", Integer.parseInt(maximum.getText()));
+                                LinkedHashMap<String, Object> functs = Utilities.singleEntryMap("function", label.getText());
+                                functs.put("count", counts);
+                                functionList.add(functs);
+                                break;
+                        }
                     }
-                }
-                LinkedHashMap<String, Object> entry = new LinkedHashMap<>();
-                entry.put("type", lootEntryType.getSelectionModel().getSelectedItem().toString());
-                entry.put("name", value.getText());
-                entry.put("functions", functionList);
-                entries.add(entry);
+                    LinkedHashMap<String, Object> entry = new LinkedHashMap<>();
+                    entry.put("type", lootEntryType.getSelectionModel().getSelectedItem().toString());
+                    entry.put("name", value.getText());
+                    entry.put("functions", functionList);
+                    entries.add(entry);
+                    entrymap.put("entries", entries);
+                });
+                poollist.add(entrymap);
             });
-            //TODO separate pools
-            poollist.add(entrymap);
-            entrymap.put("entries", entries);
             poolMap.put("pools", poollist);
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setInitialDirectory(new File(MAG.getLastResourceFolder()));
@@ -142,8 +150,8 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                 new Alert2(Alert.AlertType.INFORMATION, "Generated loot table " + lootTable).show();
             }
         });
-        lootPool.getChildren().addAll(generate);
-        Tab tab = new Tab(MAG.getLastModId(), new Vbox2(identifier, choiceBox, addLootPool, pools, lootPool));
+        Vbox2 content = new Vbox2(identifier, choiceBox, addLootPool, pools, lootPoolBox, generate);
+        Tab tab = new Tab(MAG.getLastModId(), content);
         mag.getTabPane().getTabs().add(tab);
     }
 }

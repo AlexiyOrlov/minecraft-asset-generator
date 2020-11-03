@@ -73,7 +73,7 @@ class MAG extends Application {
                 directoryChooser.setTitle("Choose directory")
                 File dir = directoryChooser.showDialog(primaryStage);
                 if (dir != null) {
-                    lastResourceFolder = dir.getAbsolutePath()
+                    lastResourceFolder = dir.getParentFile().getAbsolutePath()
                     FilePathTools.getFiles(dir.toPath(), new ArrayList<Path>()).findAll { it.toString().endsWith(".json") }.each { it ->
                         Path path = it as Path
                         def result = new JsonSlurper().parse(path.toFile())

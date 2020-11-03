@@ -1,15 +1,22 @@
 package alexiy.minecraft.asset.generator.eventhandlers;
 
 import alexiy.minecraft.assetgenerator.MAG;
+import alexiy.minecraft.assetgenerator.Utilities;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.stage.DirectoryChooser;
+import org.knowbase.Alert2;
+import org.knowbase.Hbox2;
 import org.knowbase.Vbox2;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class CreateLootTable implements EventHandler<ActionEvent> {
@@ -27,7 +34,7 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
         choiceBox.getSelectionModel().select(0);
         Label pools = new Label("Loot Pools:");
         Button addLootPool = new Button("Add loot pool");
-        Vbox2 lootPool = new Vbox2();
+        Vbox2 lootPool = new Vbox2(identifier);
         lootPool.getChildren().addAll(pools, choiceBox, addLootPool);
         List<Vbox2> lootEntries = new ArrayList<>();
         addLootPool.setOnAction(event1 -> {
@@ -64,7 +71,7 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                             TextField maxCount = new TextField();
                             minCount.setTooltip(new Tooltip("Min. amount"));
                             maxCount.setTooltip(new Tooltip("Max. amount"));
-                            lootEntry.getChildren().addAll(minCount, maxCount);
+                            lootEntry.getChildren().addAll(new Hbox2(new Label(Function.SET_COUNT.toString()), minCount, maxCount));
                     }
                     functionChoiceBox.getSelectionModel().clearSelection();
                     mag.getTabPane().requestLayout();
@@ -77,12 +84,64 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
         });
         Button generate = new Button("Generate");
         generate.setOnAction(event1 -> {
+            LinkedHashMap<String, Object> poolMap = Utilities.singleEntryMap("type", choiceBox.getSelectionModel().getSelectedItem().type);
+            List<Object> poollist = new ArrayList<>();
+            List<Object> entries = new ArrayList<>();
+            TextField rolls = (TextField) lootPool.getChildrenUnmodifiable().get(5);
+            LinkedHashMap<String, Object> entrymap = Utilities.singleEntryMap("rolls", Integer.parseInt(rolls.getText()));
             lootEntries.forEach(vbox2 -> {
                 ObservableList<Node> children = vbox2.getChildren();
-                System.out.println(children);
+                ChoiceBox<LootEntryType> lootEntryType = (ChoiceBox<LootEntryType>) children.get(1);
+                TextField value = (TextField) children.get(2);
+                List<Node> functions = children.subList(5, children.size());
+                ArrayList<LinkedHashMap<String, Object>> functionList = new ArrayList<>();
+                for (int i = 0; i < functions.size(); i += 3) {
+                    HBox hBox = (HBox) functions.get(i);
+                    ObservableList<Node> childrenUnmodifiable = hBox.getChildrenUnmodifiable();
+                    Label label = (Label) childrenUnmodifiable.get(0);
+                    switch (label.getText()) {
+                        case "set_count":
+                            TextField minimum = (TextField) childrenUnmodifiable.get(1);
+                            TextField maximum = (TextField) childrenUnmodifiable.get(2);
+                            LinkedHashMap<String, Integer> counts = new LinkedHashMap<>();
+                            counts.put("min", Integer.parseInt(minimum.getText()));
+                            counts.put("max", Integer.parseInt(maximum.getText()));
+                            LinkedHashMap<String, Object> functs = Utilities.singleEntryMap("function", label.getText());
+                            functs.put("count", counts);
+                            functionList.add(functs);
+                            break;
+                    }
+                }
+                LinkedHashMap<String, Object> entry = new LinkedHashMap<>();
+                entry.put("type", lootEntryType.getSelectionModel().getSelectedItem().toString());
+                entry.put("name", value.getText());
+                entry.put("functions", functionList);
+                entries.add(entry);
             });
+            //TODO separate pools
+            poollist.add(entrymap);
+            entrymap.put("entries", entries);
+            poolMap.put("pools", poollist);
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setInitialDirectory(new File(MAG.getLastResourceFolder()));
+            File dir = directoryChooser.showDialog(MAG.getMainStage());
+            if (!identifier.getText().isEmpty() && dir != null) {
+                String json = Utilities.formatJson(poolMap);
+                File lootTable = new File(dir, identifier.getText() + ".json");
+                Utilities.createJsonFile(lootTable.toPath(), json);
+                MAG.setLastResourceFolder(dir.getAbsolutePath());
+                File p = lootTable.getParentFile();
+                while (p.getParentFile() != null) {
+                    if (p.getName().equals("data")) {
+                        break;
+                    }
+                    p = p.getParentFile();
+                }
+                MAG.setLastModId(p.listFiles()[0].getName());
+                new Alert2(Alert.AlertType.INFORMATION, "Generated loot table " + lootTable).show();
+            }
         });
-        lootPool.getChildren().add(generate);
+        lootPool.getChildren().addAll(generate);
         Tab tab = new Tab(MAG.getLastModId(), lootPool);
         mag.getTabPane().getTabs().add(tab);
     }

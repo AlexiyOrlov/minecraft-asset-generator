@@ -150,7 +150,7 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                 new Alert2(Alert.AlertType.INFORMATION, "Generated loot table " + lootTable).show();
             }
         });
-        Vbox2 content = new Vbox2(identifier, choiceBox, addLootPool, pools, lootPoolBox, generate);
+        Vbox2 content = new Vbox2(identifier, choiceBox, addLootPool, pools, new ScrollPane(lootPoolBox), generate);
         Tab tab = new Tab(MAG.getLastModId(), content);
         mag.getTabPane().getTabs().add(tab);
     }

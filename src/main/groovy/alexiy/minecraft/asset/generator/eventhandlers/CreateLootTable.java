@@ -35,10 +35,10 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
             rolls.setTooltip(new Tooltip("Roll count"));
             Label entries = new Label("Loot entries");
             Button addEntry = new Button("Add loot entry");
-            Vbox2 lootEntry = new Vbox2();
-            lootEntry.getChildren().addAll(rolls, entries, addEntry);
-            lootPool.getChildren().add(lootEntry);
+            lootPool.getChildren().addAll(rolls, entries, addEntry);
             addEntry.setOnAction(event2 -> {
+                Vbox2 lootEntry = new Vbox2();
+                lootPool.getChildren().add(lootEntry);
                 ChoiceBox<LootEntryType> lootTableTypes = new ChoiceBox<>(FXCollections.observableArrayList(LootEntryType.values()));
                 lootTableTypes.setTooltip(new Tooltip("Type"));
                 TextField textField = new TextField();
@@ -70,9 +70,9 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                     mag.getTabPane().requestLayout();
                 });
                 lootEntry.getChildren().addAll(functions, functionChoiceBox);
+                lootEntries.add(lootEntry);
                 mag.getTabPane().requestLayout();
             });
-            lootEntries.add(lootEntry);
             mag.getTabPane().requestLayout();
         });
         Button generate = new Button("Generate");

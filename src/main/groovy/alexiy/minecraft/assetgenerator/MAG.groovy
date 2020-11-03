@@ -2,19 +2,23 @@ package alexiy.minecraft.assetgenerator
 
 import alexiy.minecraft.asset.generator.MinecraftVersion
 import alexiy.minecraft.asset.generator.eventhandlers.*
+import groovy.json.JsonSlurper
 import javafx.application.Application
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.geometry.Rectangle2D
 import javafx.scene.Scene
 import javafx.scene.control.*
+import javafx.stage.DirectoryChooser
 import javafx.stage.Modality
 import javafx.stage.Screen
 import javafx.stage.Stage
 import org.knowbase.Dialog2
 import org.knowbase.Vbox2
+import org.knowbase.tools.FilePathTools
 import org.knowbase.tools.Settings
 
+import java.nio.file.Path
 import java.nio.file.Paths
 
 /**
@@ -60,6 +64,24 @@ class MAG extends Application {
         createStandardBlockstate.setOnAction(new CreateStandardBlockState(this))
         MenuItem createAdvancement = new MenuItem('Advancement')
         createAdvancement.setOnAction(new CreateAdvancement(this))
+        MenuItem checkFiles = new MenuItem("Validate files")
+        checkFiles.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            void handle(ActionEvent event) {
+                DirectoryChooser directoryChooser = new DirectoryChooser()
+                directoryChooser.setInitialDirectory(new File(lastResourceFolder))
+                directoryChooser.setTitle("Choose directory")
+                File dir = directoryChooser.showDialog(primaryStage);
+                if (dir != null) {
+                    FilePathTools.getFiles(dir.toPath(), new ArrayList<Path>()).findAll { it.toString().endsWith(".json") }.each { it ->
+                        Path path = it as Path
+                        def result = new JsonSlurper().parse(path.toFile())
+                        assert result != null: new org.knowbase.Alert2(Alert.AlertType.ERROR, "$path is invalid", ButtonType.OK).show()
+                    }
+                }
+            }
+        })
+
 
         MenuItem createAssetFolders = new MenuItem('Make asset folders')
         createAssetFolders.setOnAction(new EventHandler<ActionEvent>() {
@@ -95,7 +117,7 @@ class MAG extends Application {
         })
 
         Menu files = new Menu("Files", null, createAssetFolders, createItemModel, createRecipe, createCustomBlockstate,
-                createStandardBlockstate, createAdvancement)
+                createStandardBlockstate, createAdvancement, checkFiles)
         menuBar = new MenuBar(files)
         tabPane = new TabPane()
         rootBox = new Vbox2(menuBar, tabPane)
@@ -103,7 +125,7 @@ class MAG extends Application {
         primaryStage.setScene(scene)
         primaryStage.setTitle("Minecraft asset generator")
         primaryStage.show()
-    }
+    };
 
     @Override
     void stop() throws Exception {

@@ -81,7 +81,7 @@ class CreateItemModel implements EventHandler<ActionEvent> {
                     }
                     content = Utilities.formatJson([parent: vart.value, textures: [layer0: "$modidentifier:$textureFolder/$itemid"]])
                     Files.write(modelFile, Collections.singleton(content))
-                    MAG.lastModId = modidentifier.substring(0, modidentifier.indexOf(':'))
+                    MAG.lastModId = modidentifier
                     new Alert2(Alert.AlertType.INFORMATION, "Created ${modelFile.toString()}", ButtonType.OK).show()
                 }
             }

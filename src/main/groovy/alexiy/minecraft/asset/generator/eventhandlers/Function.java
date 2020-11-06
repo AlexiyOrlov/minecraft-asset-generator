@@ -12,4 +12,12 @@ public enum Function {
     public String toString() {
         return name;
     }
+
+    public static Function byName(String name) {
+        for (Function function : Function.values()) {
+            if (function.name.equals(name))
+                return function;
+        }
+        return null;
+    }
 }

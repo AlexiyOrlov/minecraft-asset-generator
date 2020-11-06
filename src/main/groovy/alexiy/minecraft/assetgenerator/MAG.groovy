@@ -120,7 +120,7 @@ class MAG extends Application {
         })
 
         Menu files = new Menu("Files", null, createAssetFolders, createItemModel, createRecipe, createCustomBlockstate,
-                createStandardBlockstate, createAdvancement, createLootTable, checkFiles)
+                createStandardBlockstate, createAdvancement, createLootTable)
         menuBar = new MenuBar(files)
         tabPane = new TabPane()
         rootBox = new Vbox2(menuBar, tabPane)

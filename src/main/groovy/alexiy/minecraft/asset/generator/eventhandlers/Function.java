@@ -1,7 +1,8 @@
 package alexiy.minecraft.asset.generator.eventhandlers;
 
 public enum Function {
-    SET_COUNT("set_count");
+    SET_COUNT("set_count"),
+    ENCHANT("enchant_with_levels");
     public String name;
 
     Function(String name) {

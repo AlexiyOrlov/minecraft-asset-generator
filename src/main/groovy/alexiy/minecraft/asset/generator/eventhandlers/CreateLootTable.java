@@ -108,18 +108,24 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                         HBox hBox = (HBox) functions.get(i);
                         ObservableList<Node> childrenUnmodifiable = hBox.getChildrenUnmodifiable();
                         Label label = (Label) childrenUnmodifiable.get(0);
-                        switch (label.getText()) {
-                            case "set_count":
-                                TextField minimum = (TextField) childrenUnmodifiable.get(1);
-                                TextField maximum = (TextField) childrenUnmodifiable.get(2);
-                                LinkedHashMap<String, Integer> counts = new LinkedHashMap<>();
-                                counts.put("min", Integer.parseInt(minimum.getText()));
-                                counts.put("max", Integer.parseInt(maximum.getText()));
-                                LinkedHashMap<String, Object> functs = Utilities.singleEntryMap("function", label.getText());
-                                functs.put("count", counts);
-                                functionList.add(functs);
-                                break;
-                        }
+                        Function function = Function.byName(label.getText());
+                        if (function != null) {
+                            switch (function) {
+                                case SET_COUNT:
+                                    TextField minimum = (TextField) childrenUnmodifiable.get(1);
+                                    TextField maximum = (TextField) childrenUnmodifiable.get(2);
+                                    LinkedHashMap<String, Integer> counts = new LinkedHashMap<>();
+                                    counts.put("min", Integer.parseInt(minimum.getText()));
+                                    counts.put("max", Integer.parseInt(maximum.getText()));
+                                    LinkedHashMap<String, Object> functs = Utilities.singleEntryMap("function", label.getText());
+                                    functs.put("count", counts);
+                                    functionList.add(functs);
+                                    break;
+                                case ENCHANT:
+
+                            }
+                        } else
+                            new Alert2(Alert.AlertType.ERROR, "Function " + label.getText() + " doesn't exist").show();
                     }
                     LinkedHashMap<String, Object> entry = new LinkedHashMap<>();
                     entry.put("type", lootEntryType.getSelectionModel().getSelectedItem().toString());

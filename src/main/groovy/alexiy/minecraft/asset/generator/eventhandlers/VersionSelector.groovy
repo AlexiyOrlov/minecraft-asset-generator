@@ -1,6 +1,6 @@
 package alexiy.minecraft.asset.generator.eventhandlers
 
-import alexiy.minecraft.assetgenerator.MAG
+import alexiy.minecraft.asset.generator.MAG
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.control.ChoiceBox

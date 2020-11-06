@@ -1,7 +1,8 @@
-package alexiy.minecraft.assetgenerator
+package alexiy.minecraft.asset.generator
 
-import alexiy.minecraft.asset.generator.MinecraftVersion
+
 import alexiy.minecraft.asset.generator.eventhandlers.*
+import alexiy.minecraft.assetgenerator.Utilities
 import groovy.json.JsonSlurper
 import javafx.application.Application
 import javafx.event.ActionEvent

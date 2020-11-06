@@ -1,6 +1,6 @@
 package alexiy.minecraft.asset.generator.eventhandlers;
 
-import alexiy.minecraft.assetgenerator.MAG;
+import alexiy.minecraft.asset.generator.MAG;
 import alexiy.minecraft.assetgenerator.Utilities;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

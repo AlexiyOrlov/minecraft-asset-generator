@@ -119,14 +119,6 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                                 map += [(directionname + '=down'): [model: "$modidentr:block/$blockidenr", x: 180]]
                                 map += [(directionname + '=east'): [model: "$modidentr:block/$blockidenr", x: 90, y: 90]]
                                 map += [(directionname + '=west'): [model: "$modidentr:block/$blockidenr", x: 90, y: 270]]
-//                                Direction.values().each {
-//                                    String direction = directionname + '=' + it.name
-//                                    String axis = it.around.toString()
-//                                    if (minecraftVersion == MinecraftVersion.V1_12)
-//                                        map.put(direction, [model: "$modidentr:$blockidenr", (axis): it.rotation])
-//                                    else if (minecraftVersion == MinecraftVersion.V1_15)
-//                                        map.put(direction, [model: "$modidentr:$AssetConstants.BLOCK_LITERAL.value/$blockidenr", (axis): it.rotation])
-//                                }
                             }
                             map = [variants: map]
                             blockstateContent = Utilities.formatJson(map)

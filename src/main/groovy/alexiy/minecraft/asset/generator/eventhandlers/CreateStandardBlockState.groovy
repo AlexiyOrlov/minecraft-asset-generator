@@ -27,7 +27,9 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
     @Override
     void handle(ActionEvent event) {
         TextField modidr = new TextField(MAG.lastModId)
+        modidr.setTooltip(new Tooltip("Mod identifier"))
         TextField blockidr = new TextField()
+        blockidr.setTooltip(new Tooltip("Block identifier"))
         TextField directionName = new TextField('facing')
         directionName.setVisible(false)
         blockidr.setTooltip(new Tooltip("Block identifier"))
@@ -54,6 +56,8 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
         Label parentModel = new Label(BlockModel.SINGLETEXTURE.value)
         CheckBox generateItemModel = new CheckBox("Generate item model")
         generateItemModel.setSelected(true)
+        Button generateColoredBlocks = new Button("Generate colored blocks")
+
         ChoiceBox<String> lootTable = new ChoiceBox<>(FXCollections.observableArrayList('None', 'Self', 'Save'))
         lootTable.getSelectionModel().select(1)
         choices.setOnAction(new EventHandler<ActionEvent>() {
@@ -76,6 +80,16 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                     default:
                         directionName.setVisible(false)
                         break
+                }
+            }
+        })
+        generateColoredBlocks.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            void handle(ActionEvent evt) {
+                final String blockid = blockidr.text
+                Color.values().each {
+                    blockidr.setText(it.name().toLowerCase() + '_' + blockid)
+                    generate.getOnAction().handle(new ActionEvent(null, null))
                 }
             }
         })
@@ -258,7 +272,7 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                 }
             }
         }
-        Vbox2 vbox2 = new Vbox2(modidr, blockidr, directionName, new Hbox2(setPath, path), version, new Hbox2(choices, parentModel), description, generateItemModel, lootTable, generate)
+        Vbox2 vbox2 = new Vbox2(modidr, blockidr, directionName, new Hbox2(setPath, path), version, new Hbox2(choices, parentModel), description, generateItemModel, lootTable, generateColoredBlocks, generate)
         Tab tab = new Tab("$modidr.text:$blockidr.text", vbox2)
         mag.tabPane.getTabs().add(tab)
     };

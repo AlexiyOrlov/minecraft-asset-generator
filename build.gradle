@@ -2,7 +2,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '2.0.2'
 }
 group 'alexiy'
-version '0.12'
+version '0.13'
 
 apply plugin: 'groovy'
 

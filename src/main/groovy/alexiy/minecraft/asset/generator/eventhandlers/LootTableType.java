@@ -1,6 +1,7 @@
 package alexiy.minecraft.asset.generator.eventhandlers;
 
 public enum LootTableType {
+    CHEST("chest"),
     ADVANCEMENT_REWARD("advancement_reward");
     public String type;
 

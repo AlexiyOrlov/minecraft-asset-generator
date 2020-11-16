@@ -8,22 +8,22 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import org.knowbase.Alert2;
 import org.knowbase.Hbox2;
 import org.knowbase.Vbox2;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class CreateLootTable implements EventHandler<ActionEvent> {
     private final MAG mag;
-
+    private Random random = new Random();
     public CreateLootTable(MAG mag) {
         this.mag = mag;
     }
@@ -42,6 +42,7 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
         addLootPool.setOnAction(event1 -> {
             List<Vbox2> lootEntries = new ArrayList<>();
             Vbox2 lootPool = new Vbox2();
+            lootPool.setBackground(new Background(new BackgroundFill(new Color(random.nextDouble(), random.nextDouble(), random.nextDouble(), 1d), null, null)));
             TextField rolls = new TextField("1");
             rolls.setTooltip(new Tooltip("Roll count"));
             Label entries = new Label("Loot entries");
@@ -128,9 +129,13 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                             new Alert2(Alert.AlertType.ERROR, "Function " + label.getText() + " doesn't exist").show();
                     }
                     LinkedHashMap<String, Object> entry = new LinkedHashMap<>();
-                    entry.put("type", lootEntryType.getSelectionModel().getSelectedItem().toString());
+                    LootEntryType entryType = lootEntryType.getSelectionModel().getSelectedItem();
+                    entry.put("type", entryType.toString());
                     entry.put("name", value.getText());
+                    if (entryType == LootEntryType.TAG)
+                        entry.put("expand", false);
                     entry.put("functions", functionList);
+                    entries.add(entry);
                     entries.add(entry);
                     entrymap.put("entries", entries);
                 });

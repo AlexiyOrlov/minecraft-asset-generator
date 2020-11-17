@@ -131,11 +131,13 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                     LinkedHashMap<String, Object> entry = new LinkedHashMap<>();
                     LootEntryType entryType = lootEntryType.getSelectionModel().getSelectedItem();
                     entry.put("type", entryType.toString());
-                    entry.put("name", value.getText());
+                    String text = value.getText();
+                    if (!text.contains(":"))
+                        text = "minecraft:" + text;
+                    entry.put("name", text);
                     if (entryType == LootEntryType.TAG)
                         entry.put("expand", false);
                     entry.put("functions", functionList);
-                    entries.add(entry);
                     entries.add(entry);
                     entrymap.put("entries", entries);
                 });

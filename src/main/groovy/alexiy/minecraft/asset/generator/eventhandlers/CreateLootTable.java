@@ -151,13 +151,13 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                 String json = Utilities.formatJson(poolMap);
                 File lootTable = new File(dir, identifier.getText() + ".json");
                 Utilities.createJsonFile(lootTable.toPath(), json);
-                MAG.setLastResourceFolder(dir.getAbsolutePath());
                 File p = lootTable.getParentFile();
                 while (p.getParentFile() != null) {
                     if (p.getName().equals("data")) {
                         break;
                     }
                     p = p.getParentFile();
+                    MAG.setLastResourceFolder(p.getParentFile().getAbsolutePath());
                 }
                 MAG.setLastModId(p.listFiles()[0].getName());
                 new Alert2(Alert.AlertType.INFORMATION, "Generated loot table " + lootTable).show();

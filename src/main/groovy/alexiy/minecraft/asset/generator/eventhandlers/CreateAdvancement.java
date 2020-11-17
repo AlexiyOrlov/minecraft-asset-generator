@@ -226,13 +226,13 @@ public class CreateAdvancement implements EventHandler<ActionEvent> {
             if (file != null) {
                 File jsonFile = new File(file, identifier.getText() + ".json");
                 Utilities.createJsonFile(jsonFile.toPath(), Utilities.formatJson(root));
-                MAG.setLastResourceFolder(file.getAbsolutePath());
                 File p = file.getParentFile();
                 while (p.getParentFile() != null) {
                     if (p.getName().equals("data")) {
                         break;
                     }
                     p = p.getParentFile();
+                    MAG.setLastResourceFolder(p.getParentFile().getAbsolutePath());
                 }
                 MAG.setLastModId(p.listFiles()[0].getName());
                 new Alert2(Alert.AlertType.INFORMATION, "Generated file " + jsonFile).show();

@@ -266,9 +266,6 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
                         }
                     }
                     MAG.lastMinecraftVersion = minecraftVersion.version
-                    println(path.text)
-                    println(minecraftVersion)
-                    println(parent.name())
                 }
             }
         }

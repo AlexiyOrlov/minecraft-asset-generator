@@ -133,7 +133,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                 } else {
                     try {
                         Files.createDirectories(modelFile.getParent());
-                        if (parent != BlockState.SLAB)
+                        if (Files.notExists(modelFile))
                             Files.createFile(modelFile);
                         String fileContent = null;
                         switch (parent) {

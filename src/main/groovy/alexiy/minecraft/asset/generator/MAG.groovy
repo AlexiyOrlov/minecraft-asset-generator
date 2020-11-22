@@ -14,6 +14,7 @@ import javafx.stage.DirectoryChooser
 import javafx.stage.Modality
 import javafx.stage.Screen
 import javafx.stage.Stage
+import org.knowbase.Alert2
 import org.knowbase.Dialog2
 import org.knowbase.Vbox2
 import org.knowbase.tools.FilePathTools
@@ -63,6 +64,8 @@ class MAG extends Application {
         createCustomBlockstate.setOnAction(new CreateCustomBlockstate(this))
         MenuItem createStandardBlockstate = new MenuItem('Standard blockstate')
         createStandardBlockstate.setOnAction(new CreateStandardBlockState(this))
+        MenuItem generateStandardBlockstate = new MenuItem("Generate standard blockstate V2")
+        generateStandardBlockstate.setOnAction(new GenerateStandardBlockstate(this))
         MenuItem createAdvancement = new MenuItem('Advancement')
         createAdvancement.setOnAction(new CreateAdvancement(this))
         MenuItem createLootTable = new MenuItem("Loot table")
@@ -80,7 +83,7 @@ class MAG extends Application {
                     FilePathTools.getFiles(dir.toPath(), new ArrayList<Path>()).findAll { it.toString().endsWith(".json") }.each { it ->
                         Path path = it as Path
                         def result = new JsonSlurper().parse(path.toFile())
-                        assert result != null: new org.knowbase.Alert2(Alert.AlertType.ERROR, "$path is invalid", ButtonType.OK).show()
+                        assert result != null: new Alert2(Alert.AlertType.ERROR, "$path is invalid", ButtonType.OK).show()
                     }
                 }
             }
@@ -121,7 +124,7 @@ class MAG extends Application {
         })
 
         Menu files = new Menu("Files", null, createAssetFolders, createItemModel, createRecipe, createCustomBlockstate,
-                createStandardBlockstate, createAdvancement, createLootTable)
+                createStandardBlockstate, generateStandardBlockstate, createAdvancement, createLootTable)
         menuBar = new MenuBar(files)
         tabPane = new TabPane()
         rootBox = new Vbox2(menuBar, tabPane)

@@ -1,13 +1,23 @@
 package alexiy.minecraft.asset.generator.eventhandlers;
 
 import alexiy.minecraft.asset.generator.*;
+import alexiy.minecraft.assetgenerator.Utilities;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
+import org.knowbase.Alert2;
+import org.knowbase.Hbox2;
+import org.knowbase.Vbox2;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 
 public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
     private MAG mag;
@@ -69,7 +79,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
             if (mod != null && identifier != null) {
                 BlockState parent = choices.getValue();
                 MinecraftVersion minecraftVersion = version.getValue();
-                String texturePath;
+                String texturePath = null;
                 switch (minecraftVersion) {
                     case V1_12:
                         texturePath = mod + AssetConstants.BLOCKS_LITERAL.value + "/" + identifier;
@@ -78,7 +88,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                         texturePath = mod + AssetConstants.BLOCK_LITERAL.value + "/" + identifier;
                         break;
                 }
-                String blockstateContent = "{}";
+                String blockstateContent = null;
                 switch (parent) {
                     case SIMPLE_BLOCK:
                     case CROSS:
@@ -87,9 +97,86 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                     case COLUMN:
                         blockstateContent = CreateStandardBlockState.createSimpleBlockstate(minecraftVersion, mod, identifier);
                         break;
+                    case SLAB:
 
+                        identifier = identifier.replace("_slab", "");
+                        LinkedHashMap<String, Object> slabTypes = new LinkedHashMap<>(3);
+                        slabTypes.put("type=bottom", Utilities.singleEntryMap("model", mod + ":block/" + identifier + "_bottom"));
+                        slabTypes.put("type=top", Utilities.singleEntryMap("model", mod + ":block/" + identifier + "_top"));
+                        slabTypes.put("type=double", Utilities.singleEntryMap("model", mod + ":block/" + identifier));
+                        LinkedHashMap<String, Object> linkedHashMap = Utilities.singleEntryMap("variants", slabTypes);
+                        blockstateContent = Utilities.formatJson(linkedHashMap);
+                        break;
+                }
+                if (blockstateContent != null) {
+                    Path file = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.BLOCKSTATES.value, identifier + "_slab.json");
+                    if (Files.exists(file))
+                        new Alert2(Alert.AlertType.WARNING, file + " exists", ButtonType.OK).show();
+                    else {
+                        try {
+                            Files.createDirectories(file.getParent());
+                            Files.createFile(file);
+                            Files.write(file, Collections.singleton(blockstateContent));
+                            new Alert2(Alert.AlertType.INFORMATION, "Created blockstate " + file, ButtonType.CLOSE).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                Path modelFile;
+                switch (parent) {
+                    case SLAB:
+                        texturePath = texturePath.replace("_slab", "");
+                        modelFile = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier.replace("_slab", "") + ".json");
+                        break;
+                    default:
+                        modelFile = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + ".json");
+                }
+                if (Files.exists(modelFile)) {
+                    new Alert2(Alert.AlertType.WARNING, modelFile + " exists", ButtonType.OK).show();
+                } else {
+                    try {
+                        Files.createDirectories(modelFile.getParent());
+                        Files.createFile(modelFile);
+                        String fileContent = null;
+                        switch (parent) {
+                            case SLAB:
+                                Path topModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_top.json");
+                                LinkedHashMap<String, Object> texturesTop = new LinkedHashMap<>(3);
+                                texturesTop.put("bottom", mod + ":block/" + identifier);
+                                texturesTop.put("top", mod + ":block/" + identifier);
+                                texturesTop.put("side", mod + ":block/" + identifier);
+                                LinkedHashMap<String, Object> modelMap = new LinkedHashMap<>(2);
+                                modelMap.put("parent", "minecraft:block/slab_top");
+                                modelMap.put("textures", texturesTop);
+                                Files.write(topModel, Collections.singleton(Utilities.formatJson(modelMap)));
+
+                                Path bottomModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_bottom.json");
+                                LinkedHashMap<String, Object> texturesBottom = new LinkedHashMap<>(3);
+                                texturesBottom.put("bottom", mod + ":block/" + identifier);
+                                texturesBottom.put("top", mod + ":block/" + identifier);
+                                texturesBottom.put("side", mod + ":block/" + identifier);
+                                LinkedHashMap<String, Object> bottomModelMap = new LinkedHashMap<>(2);
+                                bottomModelMap.put("parent", "minecraft:block/slab");
+                                bottomModelMap.put("textures", texturesBottom);
+                                Files.write(bottomModel, Collections.singleton(Utilities.formatJson(bottomModelMap)));
+
+                                LinkedHashMap<String, Object> texturesFull = Utilities.singleEntryMap("all", texturePath);
+                                LinkedHashMap<String, Object> fullModel = new LinkedHashMap<>(2);
+                                fullModel.put("parent", BlockModel.SINGLETEXTURE.value);
+                                fullModel.put("textures", texturesFull);
+                                fileContent = Utilities.formatJson(fullModel);
+                                break;
+                        }
+
+                        Files.write(modelFile, Collections.singleton(fileContent));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
+        Vbox2 container = new Vbox2(modidr, blockidr, directionName, new Hbox2(setPath, path), version, new Hbox2(choices, parentModel), description, generateItemModel, lootTable, generateColoredBlocks, generate);
+        mag.getTabPane().getTabs().add(new Tab(modidr.getText() + ":" + blockidr.getText(), container));
     }
 }

@@ -39,7 +39,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
         Button setPath = new Button("Set output path");
         setPath.setOnAction(event1 -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
-            directoryChooser.setTitle("Select 'resources/[mod name]' directory");
+            directoryChooser.setTitle("Select 'resources' directory");
             directoryChooser.setInitialDirectory(new File(MAG.getLastResourceFolder()));
             File dire = directoryChooser.showDialog(MAG.getMainStage());
             if (dire != null) {
@@ -57,7 +57,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
         CheckBox generateItemModel = new CheckBox("Generate item model");
         generateItemModel.setSelected(true);
 
-        ChoiceBox<String> lootTable = new ChoiceBox<>(FXCollections.observableArrayList("None", "Self", "Save"));
+        ChoiceBox<BlockDrop> lootTable = new ChoiceBox<>(FXCollections.observableArrayList(BlockDrop.values()));
         lootTable.getSelectionModel().select(1);
         choices.setOnAction(event1 -> {
             BlockState blockState = choices.getValue();
@@ -109,7 +109,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                         break;
                 }
                 if (blockstateContent != null) {
-                    Path file = Paths.get(path.getText(), AssetConstants.BLOCKSTATES.value, identifier + "_slab.json");
+                    Path file = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.BLOCKSTATES.value, identifier + "_slab.json");
                     if (Files.exists(file))
                         new Alert2(Alert.AlertType.WARNING, file + " exists", ButtonType.OK).show();
                     else {
@@ -126,7 +126,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                 Path modelFile;
                 switch (parent) {
                     default:
-                        modelFile = Paths.get(path.getText(), AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + ".json");
+                        modelFile = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + ".json");
                 }
                 if (Files.exists(modelFile) && parent != BlockState.SLAB) {
                     new Alert2(Alert.AlertType.WARNING, modelFile + " exists", ButtonType.OK).show();
@@ -138,7 +138,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                         String fileContent = null;
                         switch (parent) {
                             case SLAB:
-                                Path topModel = Paths.get(path.getText(), AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_slab_top.json");
+                                Path topModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_slab_top.json");
                                 LinkedHashMap<String, Object> texturesTop = new LinkedHashMap<>(3);
                                 texturesTop.put("bottom", mod + ":block/" + identifier);
                                 texturesTop.put("top", mod + ":block/" + identifier);
@@ -148,7 +148,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                                 modelMap.put("textures", texturesTop);
                                 Files.write(topModel, Collections.singleton(Utilities.formatJson(modelMap)));
 
-                                Path bottomModel = Paths.get(path.getText(), AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_slab_bottom.json");
+                                Path bottomModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_slab_bottom.json");
                                 LinkedHashMap<String, Object> texturesBottom = new LinkedHashMap<>(3);
                                 texturesBottom.put("bottom", mod + ":block/" + identifier);
                                 texturesBottom.put("top", mod + ":block/" + identifier);
@@ -180,7 +180,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                             identifier = identifier + "_slab";
                             break;
                     }
-                    pathItemModel = Paths.get(path.getText(), AssetConstants.MODELS_LITERAL.value, AssetConstants.ITEM_LITERAL.value, identifier + ".json");
+                    pathItemModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.ITEM_LITERAL.value, identifier + ".json");
                     if (Files.exists(pathItemModel))
                         new Alert2(Alert.AlertType.WARNING, pathItemModel + " exists").show();
                     else {
@@ -196,6 +196,39 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    }
+                }
+
+                BlockDrop blockDrop = lootTable.getValue();
+                Path blockTable = Paths.get(path.getText(), AssetConstants.DATA.value, mod, AssetConstants.LOOT_TABLES.value, AssetConstants.BLOCKS_LITERAL.value, identifier + ".json");
+                String content = null;
+                switch (blockDrop) {
+                    case SELF:
+                        LinkedHashMap<String, Object> condition = Utilities.singleEntryMap("condition", "minecraft:survives_explosion");
+                        LinkedHashMap<String, Object> entry = new LinkedHashMap<>(2);
+                        entry.put("type", "minecraft:item");
+                        entry.put("name", mod + ":" + identifier);
+                        LinkedHashMap<String, Object> pool = new LinkedHashMap<>(3);
+                        pool.put("rolls", 1);
+                        pool.put("entries", Collections.singletonList(entry));
+                        pool.put("conditions", Collections.singletonList(condition));
+                        LinkedHashMap<String, Object> pools = new LinkedHashMap<>(2);
+                        pools.put("type", "minecraft:block");
+                        pools.put("pools", Collections.singletonList(pool));
+                        content = Utilities.formatJson(pools);
+                        break;
+                    case SAVED:
+                }
+                if (Files.exists(blockTable))
+                    new Alert2(Alert.AlertType.WARNING, "Block loot " + blockTable + " exists").show();
+                else {
+                    try {
+                        Files.createDirectories(blockTable.getParent());
+                        Files.createFile(blockTable);
+                        Files.write(blockTable, Collections.singleton(content));
+                        new Alert2(Alert.AlertType.INFORMATION, "Created block table " + blockTable).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }

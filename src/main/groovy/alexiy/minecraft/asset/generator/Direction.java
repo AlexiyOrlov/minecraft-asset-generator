@@ -1,4 +1,4 @@
-package alexiy.minecraft.assetgenerator;
+package alexiy.minecraft.asset.generator;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,6 +1,6 @@
 package alexiy.minecraft.assetgenerator.eventhandlers
 
-import alexiy.minecraft.assetgenerator.Recipes
+import alexiy.minecraft.asset.generator.Recipes
 import com.google.common.collect.TreeBasedTable
 import javafx.event.ActionEvent
 import javafx.event.EventHandler

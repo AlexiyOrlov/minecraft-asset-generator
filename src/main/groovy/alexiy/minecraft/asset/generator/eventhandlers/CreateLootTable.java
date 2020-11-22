@@ -1,5 +1,8 @@
 package alexiy.minecraft.asset.generator.eventhandlers;
 
+import alexiy.minecraft.asset.generator.Function;
+import alexiy.minecraft.asset.generator.LootEntryType;
+import alexiy.minecraft.asset.generator.LootTableType;
 import alexiy.minecraft.asset.generator.MAG;
 import alexiy.minecraft.assetgenerator.Utilities;
 import javafx.collections.FXCollections;

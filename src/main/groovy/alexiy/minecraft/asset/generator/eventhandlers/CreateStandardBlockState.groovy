@@ -1,8 +1,7 @@
 package alexiy.minecraft.asset.generator.eventhandlers
 
-import alexiy.minecraft.asset.generator.MAG
-import alexiy.minecraft.asset.generator.MinecraftVersion
-import alexiy.minecraft.assetgenerator.*
+import alexiy.minecraft.asset.generator.*
+import alexiy.minecraft.assetgenerator.Utilities
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
 import javafx.event.EventHandler

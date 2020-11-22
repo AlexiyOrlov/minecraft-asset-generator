@@ -1,6 +1,6 @@
 package alexiy.minecraft.assetgenerator.eventhandlers
 
-import alexiy.minecraft.assetgenerator.AssetConstants
+import alexiy.minecraft.asset.generator.AssetConstants
 import alexiy.minecraft.assetgenerator.ItemModel
 import alexiy.minecraft.assetgenerator.JAG
 import alexiy.minecraft.assetgenerator.Utilities

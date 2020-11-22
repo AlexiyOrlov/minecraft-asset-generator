@@ -1,4 +1,4 @@
-package alexiy.minecraft.assetgenerator;
+package alexiy.minecraft.asset.generator;
 
 /**
  * Created on 8/7/17.

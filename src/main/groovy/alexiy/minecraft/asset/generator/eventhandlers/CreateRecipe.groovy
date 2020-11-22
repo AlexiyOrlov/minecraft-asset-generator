@@ -1,9 +1,9 @@
 package alexiy.minecraft.asset.generator.eventhandlers
 
+import alexiy.minecraft.asset.generator.AssetConstants
 import alexiy.minecraft.asset.generator.MAG
 import alexiy.minecraft.asset.generator.MinecraftVersion
-import alexiy.minecraft.assetgenerator.AssetConstants
-import alexiy.minecraft.assetgenerator.Recipes
+import alexiy.minecraft.asset.generator.Recipes
 import alexiy.minecraft.assetgenerator.Utilities
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList

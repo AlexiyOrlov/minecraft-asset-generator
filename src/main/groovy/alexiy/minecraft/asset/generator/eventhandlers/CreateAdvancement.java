@@ -1,5 +1,6 @@
 package alexiy.minecraft.asset.generator.eventhandlers;
 
+import alexiy.minecraft.asset.generator.AdvancementTrigger;
 import alexiy.minecraft.asset.generator.MAG;
 import alexiy.minecraft.assetgenerator.Utilities;
 import com.google.common.collect.ArrayListMultimap;

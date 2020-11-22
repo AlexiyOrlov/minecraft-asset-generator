@@ -1,6 +1,10 @@
 package alexiy.minecraft.assetgenerator.eventhandlers
 
-import alexiy.minecraft.assetgenerator.*
+import alexiy.minecraft.asset.generator.AssetConstants
+import alexiy.minecraft.asset.generator.Recipes
+import alexiy.minecraft.assetgenerator.Alert2
+import alexiy.minecraft.assetgenerator.JAG
+import alexiy.minecraft.assetgenerator.Utilities
 import com.google.common.collect.TreeBasedTable
 import javafx.event.ActionEvent
 import javafx.event.EventHandler

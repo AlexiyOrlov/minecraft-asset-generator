@@ -1,6 +1,13 @@
 package alexiy.minecraft.assetgenerator.eventhandlers
 
-import alexiy.minecraft.assetgenerator.*
+import alexiy.minecraft.asset.generator.AssetConstants
+import alexiy.minecraft.asset.generator.BlockModel
+import alexiy.minecraft.asset.generator.BlockState
+import alexiy.minecraft.asset.generator.Direction
+import alexiy.minecraft.assetgenerator.Alert2
+import alexiy.minecraft.assetgenerator.BlockStateConditions
+import alexiy.minecraft.assetgenerator.JAG
+import alexiy.minecraft.assetgenerator.Utilities
 import com.google.common.collect.Sets
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent

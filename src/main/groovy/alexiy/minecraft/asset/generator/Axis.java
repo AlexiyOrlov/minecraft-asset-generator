@@ -1,4 +1,4 @@
-package alexiy.minecraft.assetgenerator;
+package alexiy.minecraft.asset.generator;
 
 public enum Axis {
     X, Y, Z;

@@ -1,6 +1,12 @@
 package alexiy.minecraft.assetgenerator.eventhandlers
 
-import alexiy.minecraft.assetgenerator.*
+import alexiy.minecraft.asset.generator.AssetConstants
+import alexiy.minecraft.asset.generator.BlockState
+import alexiy.minecraft.asset.generator.Recipes
+import alexiy.minecraft.assetgenerator.Alert2
+import alexiy.minecraft.assetgenerator.ItemModel
+import alexiy.minecraft.assetgenerator.JAG
+import alexiy.minecraft.assetgenerator.Utilities
 import com.google.common.collect.Sets
 import com.google.common.collect.TreeBasedTable
 import javafx.collections.FXCollections
@@ -16,7 +22,7 @@ import javafx.util.Callback
 
 import java.nio.file.Paths
 
-import static alexiy.minecraft.assetgenerator.AssetConstants.BLOCKSTATES
+import static alexiy.minecraft.asset.generator.AssetConstants.BLOCKSTATES
 
 /**
  * Created on 2/10/20.

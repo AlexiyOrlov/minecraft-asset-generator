@@ -39,6 +39,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
         Button setPath = new Button("Set output path");
         setPath.setOnAction(event1 -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("Select 'resources/[mod name]' directory");
             directoryChooser.setInitialDirectory(new File(MAG.getLastResourceFolder()));
             File dire = directoryChooser.showDialog(MAG.getMainStage());
             if (dire != null) {
@@ -82,10 +83,10 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                 String texturePath = null;
                 switch (minecraftVersion) {
                     case V1_12:
-                        texturePath = mod + AssetConstants.BLOCKS_LITERAL.value + "/" + identifier;
+                        texturePath = mod + ":" + AssetConstants.BLOCKS_LITERAL.value + "/" + identifier;
                         break;
                     case V1_15:
-                        texturePath = mod + AssetConstants.BLOCK_LITERAL.value + "/" + identifier;
+                        texturePath = mod + ":" + AssetConstants.BLOCK_LITERAL.value + "/" + identifier;
                         break;
                 }
                 String blockstateContent = null;
@@ -108,7 +109,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                         break;
                 }
                 if (blockstateContent != null) {
-                    Path file = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.BLOCKSTATES.value, identifier + "_slab.json");
+                    Path file = Paths.get(path.getText(), AssetConstants.BLOCKSTATES.value, identifier + "_slab.json");
                     if (Files.exists(file))
                         new Alert2(Alert.AlertType.WARNING, file + " exists", ButtonType.OK).show();
                     else {
@@ -124,22 +125,20 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                 }
                 Path modelFile;
                 switch (parent) {
-                    case SLAB:
-                        modelFile = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + ".json");
-                        break;
                     default:
-                        modelFile = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + ".json");
+                        modelFile = Paths.get(path.getText(), AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + ".json");
                 }
-                if (Files.exists(modelFile)) {
+                if (Files.exists(modelFile) && parent != BlockState.SLAB) {
                     new Alert2(Alert.AlertType.WARNING, modelFile + " exists", ButtonType.OK).show();
                 } else {
                     try {
                         Files.createDirectories(modelFile.getParent());
-                        Files.createFile(modelFile);
+                        if (parent != BlockState.SLAB)
+                            Files.createFile(modelFile);
                         String fileContent = null;
                         switch (parent) {
                             case SLAB:
-                                Path topModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_slab_top.json");
+                                Path topModel = Paths.get(path.getText(), AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_slab_top.json");
                                 LinkedHashMap<String, Object> texturesTop = new LinkedHashMap<>(3);
                                 texturesTop.put("bottom", mod + ":block/" + identifier);
                                 texturesTop.put("top", mod + ":block/" + identifier);
@@ -149,7 +148,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                                 modelMap.put("textures", texturesTop);
                                 Files.write(topModel, Collections.singleton(Utilities.formatJson(modelMap)));
 
-                                Path bottomModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_slab_bottom.json");
+                                Path bottomModel = Paths.get(path.getText(), AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_slab_bottom.json");
                                 LinkedHashMap<String, Object> texturesBottom = new LinkedHashMap<>(3);
                                 texturesBottom.put("bottom", mod + ":block/" + identifier);
                                 texturesBottom.put("top", mod + ":block/" + identifier);
@@ -172,6 +171,8 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                         e.printStackTrace();
                     }
                 }
+
+
                 if (generateItemModel.isSelected()) {
                     Path pathItemModel;
                     switch (parent) {
@@ -179,7 +180,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                             identifier = identifier + "_slab";
                             break;
                     }
-                    pathItemModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.ITEM_LITERAL.value, identifier + ".json");
+                    pathItemModel = Paths.get(path.getText(), AssetConstants.MODELS_LITERAL.value, AssetConstants.ITEM_LITERAL.value, identifier + ".json");
                     if (Files.exists(pathItemModel))
                         new Alert2(Alert.AlertType.WARNING, pathItemModel + " exists").show();
                     else {

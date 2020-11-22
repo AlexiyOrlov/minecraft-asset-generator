@@ -273,7 +273,12 @@ class CreateStandardBlockState implements EventHandler<ActionEvent> {
         mag.tabPane.getTabs().add(tab)
     };
 
-    private static String createSimpleBlockstate(MinecraftVersion version, String mod, String blockId) {
+    @Override
+    boolean equals(Object obj) {
+        return super.equals(obj)
+    }
+
+    static String createSimpleBlockstate(MinecraftVersion version, String mod, String blockId) {
         String content
         switch (version) {
             case MinecraftVersion.V1_12:

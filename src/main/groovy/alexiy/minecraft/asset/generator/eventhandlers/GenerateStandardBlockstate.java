@@ -99,10 +99,9 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                         break;
                     case SLAB:
 
-                        identifier = identifier.replace("_slab", "");
                         LinkedHashMap<String, Object> slabTypes = new LinkedHashMap<>(3);
-                        slabTypes.put("type=bottom", Utilities.singleEntryMap("model", mod + ":block/" + identifier + "_bottom"));
-                        slabTypes.put("type=top", Utilities.singleEntryMap("model", mod + ":block/" + identifier + "_top"));
+                        slabTypes.put("type=bottom", Utilities.singleEntryMap("model", mod + ":block/" + identifier + "_slab_bottom"));
+                        slabTypes.put("type=top", Utilities.singleEntryMap("model", mod + ":block/" + identifier + "_slab_top"));
                         slabTypes.put("type=double", Utilities.singleEntryMap("model", mod + ":block/" + identifier));
                         LinkedHashMap<String, Object> linkedHashMap = Utilities.singleEntryMap("variants", slabTypes);
                         blockstateContent = Utilities.formatJson(linkedHashMap);
@@ -126,8 +125,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                 Path modelFile;
                 switch (parent) {
                     case SLAB:
-                        texturePath = texturePath.replace("_slab", "");
-                        modelFile = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier.replace("_slab", "") + ".json");
+                        modelFile = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + ".json");
                         break;
                     default:
                         modelFile = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + ".json");
@@ -141,7 +139,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                         String fileContent = null;
                         switch (parent) {
                             case SLAB:
-                                Path topModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_top.json");
+                                Path topModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_slab_top.json");
                                 LinkedHashMap<String, Object> texturesTop = new LinkedHashMap<>(3);
                                 texturesTop.put("bottom", mod + ":block/" + identifier);
                                 texturesTop.put("top", mod + ":block/" + identifier);
@@ -151,7 +149,7 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                                 modelMap.put("textures", texturesTop);
                                 Files.write(topModel, Collections.singleton(Utilities.formatJson(modelMap)));
 
-                                Path bottomModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_bottom.json");
+                                Path bottomModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.BLOCK_LITERAL.value, identifier + "_slab_bottom.json");
                                 LinkedHashMap<String, Object> texturesBottom = new LinkedHashMap<>(3);
                                 texturesBottom.put("bottom", mod + ":block/" + identifier);
                                 texturesBottom.put("top", mod + ":block/" + identifier);
@@ -172,6 +170,31 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
                         Files.write(modelFile, Collections.singleton(fileContent));
                     } catch (IOException e) {
                         e.printStackTrace();
+                    }
+                }
+                if (generateItemModel.isSelected()) {
+                    Path pathItemModel;
+                    switch (parent) {
+                        case SLAB:
+                            identifier = identifier + "_slab";
+                            break;
+                    }
+                    pathItemModel = Paths.get(path.getText(), AssetConstants.ASSETS.value, mod, AssetConstants.MODELS_LITERAL.value, AssetConstants.ITEM_LITERAL.value, identifier + ".json");
+                    if (Files.exists(pathItemModel))
+                        new Alert2(Alert.AlertType.WARNING, pathItemModel + " exists").show();
+                    else {
+                        switch (parent) {
+                            case SLAB:
+                                identifier = identifier + "_bottom";
+                                break;
+                        }
+                        try {
+                            Files.createDirectories(pathItemModel.getParent());
+                            Files.createFile(pathItemModel);
+                            Files.write(pathItemModel, Collections.singleton(Utilities.formatJson(Utilities.singleEntryMap("parent", mod + ":block/" + identifier))));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

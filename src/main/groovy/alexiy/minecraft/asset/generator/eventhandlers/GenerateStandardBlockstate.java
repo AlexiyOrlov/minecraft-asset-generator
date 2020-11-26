@@ -50,14 +50,14 @@ public class GenerateStandardBlockstate implements EventHandler<ActionEvent> {
 
         ChoiceBox<MinecraftVersion> version = new ChoiceBox<>(FXCollections.observableArrayList(MinecraftVersion.values()));
         version.getSelectionModel().select(MinecraftVersion.V1_15);
-        ChoiceBox<BlockState> choices = new ChoiceBox<>(FXCollections.observableArrayList(BlockState.values()));
+        ChoiceBox<BlockState> choices = new ChoiceBox<>(FXCollections.observableArrayList(BlockState.SLAB));
         choices.getSelectionModel().select(BlockState.SIMPLE_BLOCK);
         Label description = new Label(BlockState.SIMPLE_BLOCK.getDescription());
         Label parentModel = new Label(BlockModel.SINGLETEXTURE.value);
         CheckBox generateItemModel = new CheckBox("Generate item model");
         generateItemModel.setSelected(true);
 
-        ChoiceBox<BlockDrop> lootTable = new ChoiceBox<>(FXCollections.observableArrayList(BlockDrop.values()));
+        ChoiceBox<BlockDrop> lootTable = new ChoiceBox<>(FXCollections.observableArrayList(BlockDrop.NONE, BlockDrop.SELF));
         lootTable.getSelectionModel().select(1);
         choices.setOnAction(event1 -> {
             BlockState blockState = choices.getValue();

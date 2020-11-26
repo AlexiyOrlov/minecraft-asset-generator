@@ -32,6 +32,6 @@ dependencies {
 jar{
 
     manifest {
-        attributes(['Main-Class': 'alexiy.minecraft.assetgenerator.MAG'])
+        attributes(['Main-Class': 'alexiy.minecraft.asset.generator.MAG'])
     }
 }

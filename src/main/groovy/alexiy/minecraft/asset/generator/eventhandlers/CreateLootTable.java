@@ -75,11 +75,20 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                 functionChoiceBox.setOnAction(event3 -> {
                     switch (functionChoiceBox.getSelectionModel().getSelectedItem()) {
                         case SET_COUNT:
-                            TextField minCount = new TextField();
+                            TextField minCount = new TextField("1");
                             TextField maxCount = new TextField();
                             minCount.setTooltip(new Tooltip("Min. amount"));
                             maxCount.setTooltip(new Tooltip("Max. amount"));
                             lootEntry.getChildren().addAll(new Hbox2(new Label(Function.SET_COUNT.toString()), minCount, maxCount));
+                            break;
+                        case ENCHANT:
+                            TextField minLevel = new TextField("1");
+                            TextField maxLevel = new TextField("30");
+                            CheckBox allowTreasureEnchantments = new CheckBox("Allow treasure enchantments");
+                            minLevel.setTooltip(new Tooltip("Min. enchantments"));
+                            maxLevel.setTooltip(new Tooltip("Max. enchantments"));
+                            lootEntry.getChildren().addAll(new Hbox2(new Label(Function.ENCHANT.toString()), minLevel, maxLevel, allowTreasureEnchantments));
+                            break;
                     }
                     functionChoiceBox.getSelectionModel().clearSelection();
                     mag.getTabPane().requestLayout();
@@ -113,20 +122,35 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                         ObservableList<Node> childrenUnmodifiable = hBox.getChildrenUnmodifiable();
                         Label label = (Label) childrenUnmodifiable.get(0);
                         Function function = Function.byName(label.getText());
+                        LinkedHashMap<String, Object> functs = Utilities.singleEntryMap("function", label.getText());
                         if (function != null) {
                             switch (function) {
                                 case SET_COUNT:
                                     TextField minimum = (TextField) childrenUnmodifiable.get(1);
                                     TextField maximum = (TextField) childrenUnmodifiable.get(2);
-                                    LinkedHashMap<String, Integer> counts = new LinkedHashMap<>();
+                                    LinkedHashMap<String, Integer> counts = new LinkedHashMap<>(3);
                                     counts.put("min", Integer.parseInt(minimum.getText()));
                                     counts.put("max", Integer.parseInt(maximum.getText()));
-                                    LinkedHashMap<String, Object> functs = Utilities.singleEntryMap("function", label.getText());
                                     functs.put("count", counts);
                                     functionList.add(functs);
                                     break;
                                 case ENCHANT:
-
+                                    TextField min = (TextField) childrenUnmodifiable.get(1);
+                                    TextField max = (TextField) childrenUnmodifiable.get(2);
+                                    CheckBox checkBox = (CheckBox) childrenUnmodifiable.get(3);
+                                    LinkedHashMap<String, Object> levels = new LinkedHashMap<>(3);
+                                    if (min.getText().equals(max.getText()) || max.getText().isEmpty()) {
+                                        levels.put("type", "constant");
+                                        levels.put("value", Float.parseFloat(min.getText()));
+                                    } else {
+                                        levels.put("type", "uniform");
+                                        levels.put("min", Float.parseFloat(min.getText()));
+                                        levels.put("max", Float.parseFloat(max.getText()));
+                                    }
+                                    functs.put("levels", levels);
+                                    functs.put("treasure", checkBox.isSelected());
+                                    functionList.add(functs);
+                                    break;
                             }
                         } else
                             new Alert2(Alert.AlertType.ERROR, "Function " + label.getText() + " doesn't exist").show();

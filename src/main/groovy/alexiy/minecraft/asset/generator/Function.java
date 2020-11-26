@@ -2,6 +2,7 @@ package alexiy.minecraft.asset.generator;
 
 public enum Function {
     SET_COUNT("set_count"),
+    RANDOM_ENCHANT("enchant_randomly"),
     ENCHANT("enchant_with_levels");
     public String name;
 

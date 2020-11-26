@@ -89,6 +89,8 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                             maxLevel.setTooltip(new Tooltip("Max. enchantments"));
                             lootEntry.getChildren().addAll(new Hbox2(new Label(Function.ENCHANT.toString()), minLevel, maxLevel, allowTreasureEnchantments));
                             break;
+                        case RANDOM_ENCHANT:
+                            lootEntry.getChildren().addAll(new Hbox2(new Label(Function.RANDOM_ENCHANT.toString())));
                     }
                     functionChoiceBox.getSelectionModel().clearSelection();
                     mag.getTabPane().requestLayout();
@@ -151,6 +153,7 @@ public class CreateLootTable implements EventHandler<ActionEvent> {
                                     functs.put("treasure", checkBox.isSelected());
                                     functionList.add(functs);
                                     break;
+
                             }
                         } else
                             new Alert2(Alert.AlertType.ERROR, "Function " + label.getText() + " doesn't exist").show();

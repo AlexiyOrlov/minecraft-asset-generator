@@ -116,7 +116,7 @@ class MAG extends Application {
                             Utilities.createAssetFoldersIfNeeded(version.text, new File(resourceFolder.text), domain)
                             lastModId = domain
                         } else {
-                            new org.knowbase.Alert2(Alert.AlertType.ERROR, 'Fill all fields', ButtonType.OK).show()
+                            new Alert2(Alert.AlertType.ERROR, 'Fill all fields', ButtonType.OK).show()
                         }
                     }
                 }

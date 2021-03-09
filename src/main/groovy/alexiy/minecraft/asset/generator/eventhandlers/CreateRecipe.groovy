@@ -281,13 +281,13 @@ class CreateRecipe implements EventHandler<ActionEvent> {
                     @Override
                     void handle(ActionEvent e) {
                         ObservableList<TextField> fields = gridPaneShaped.childrenUnmodifiable as ObservableList<TextField>
-                        Set<String> uniqueKyes = []
+                        Set<String> uniqueKeys = []
 
-                        uniqueKyes.addAll(fields*.text as Set)
-                        uniqueKyes.removeAll('')
-                        if (uniqueKyes) {
+                        uniqueKeys.addAll(fields*.text as Set)
+                        uniqueKeys.removeAll('')
+                        if (uniqueKeys) {
                             keycontainer.children.clear()
-                            for (k in uniqueKyes) {
+                            for (k in uniqueKeys) {
                                 TextField ingredient = new TextField()
                                 ingredient.setTooltip(new Tooltip('Ingredient item name'))
                                 keycontainer.children.add(new Hbox2(new Label(k), ingredient))

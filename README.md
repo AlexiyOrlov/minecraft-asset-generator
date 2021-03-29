@@ -18,3 +18,5 @@ Groovy code must be migrated to Java or rewritten from scratch.
 As JavaFX is no longer included in JDK, an 
 alternative should be found and used as UI
 implementation.
+
+Rewrite of the project must be done on `rewrite` branch.
